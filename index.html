@@ -1,0 +1,2008 @@
+<title>Alpha 与 Beta 的分工</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@500;600;700&display=swap">
+
+<style>
+/* ============================================================
+   设计令牌 —— 浅色为基准，暗色在媒体查询与 data-theme 中重定义
+   ============================================================ */
+:root{
+  color-scheme: light;
+
+  --ground:      #F3F6FA;
+  --surface:     #FFFFFF;
+  --surface-2:   #E9EEF5;
+  --surface-3:   #DFE6F0;
+  --ink:         #0E1621;
+  --ink-2:       #4C5869;
+  --ink-3:       #7B879A;
+  --rule:        #D8E0EB;
+  --rule-soft:   #E6EBF3;
+
+  --alpha:       #1F6FB2;
+  --alpha-deep:  #14517F;
+  --alpha-soft:  rgba(31,111,178,.10);
+  --alpha-line:  rgba(31,111,178,.30);
+
+  --beta:        #C2691C;
+  --beta-deep:   #8E4A11;
+  --beta-soft:   rgba(194,105,28,.10);
+  --beta-line:   rgba(194,105,28,.30);
+
+  --warn:        #9A6A00;
+  --warn-soft:   rgba(154,106,0,.10);
+
+  --shadow-sm:   0 1px 2px rgba(14,22,33,.05), 0 1px 3px rgba(14,22,33,.04);
+  --shadow-md:   0 2px 4px rgba(14,22,33,.05), 0 6px 16px rgba(14,22,33,.06);
+
+  --font-display: 'Noto Serif SC','Songti SC','SimSun',Georgia,serif;
+  --font-body:    'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  --font-mono:    'IBM Plex Mono',ui-monospace,'Cascadia Mono',Consolas,monospace;
+
+  --measure: 68ch;
+  --pad-x: 20px;
+  --radius: 4px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:     #0C121A;
+    --surface:    #141C27;
+    --surface-2:  #1C2634;
+    --surface-3:  #253141;
+    --ink:        #E6ECF4;
+    --ink-2:      #9AA7BA;
+    --ink-3:      #74839A;
+    --rule:       #28323F;
+    --rule-soft:  #1F2836;
+
+    --alpha:      #4A90C8;
+    --alpha-deep: #7FB6E0;
+    --alpha-soft: rgba(74,144,200,.14);
+    --alpha-line: rgba(74,144,200,.38);
+
+    --beta:       #C97C33;
+    --beta-deep:  #E0A468;
+    --beta-soft:  rgba(201,124,51,.14);
+    --beta-line:  rgba(201,124,51,.38);
+
+    --warn:       #D6A93C;
+    --warn-soft:  rgba(214,169,60,.12);
+
+    --shadow-sm:  0 1px 2px rgba(0,0,0,.35);
+    --shadow-md:  0 2px 4px rgba(0,0,0,.30), 0 8px 20px rgba(0,0,0,.35);
+  }
+}
+
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:     #0C121A;
+  --surface:    #141C27;
+  --surface-2:  #1C2634;
+  --surface-3:  #253141;
+  --ink:        #E6ECF4;
+  --ink-2:      #9AA7BA;
+  --ink-3:      #74839A;
+  --rule:       #28323F;
+  --rule-soft:  #1F2836;
+
+  --alpha:      #4A90C8;
+  --alpha-deep: #7FB6E0;
+  --alpha-soft: rgba(74,144,200,.14);
+  --alpha-line: rgba(74,144,200,.38);
+
+  --beta:       #C97C33;
+  --beta-deep:  #E0A468;
+  --beta-soft:  rgba(201,124,51,.14);
+  --beta-line:  rgba(201,124,51,.38);
+
+  --warn:       #D6A93C;
+  --warn-soft:  rgba(214,169,60,.12);
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,.35);
+  --shadow-md:  0 2px 4px rgba(0,0,0,.30), 0 8px 20px rgba(0,0,0,.35);
+}
+
+/* ============================================================
+   基础
+   ============================================================ */
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.85;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,h2,h3,h4{
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+  margin: 0;
+  letter-spacing: -.005em;
+}
+
+p{ margin: 0; }
+a{ color: var(--alpha); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover{ color: var(--alpha-deep); }
+code, .mono{ font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+strong{ font-weight: 700; }
+em{ font-style: normal; color: var(--beta-deep); font-weight: 500; }
+
+:focus-visible{
+  outline: 2px solid var(--alpha);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* 语言切换 */
+html[data-lang="en"] .zh{ display: none !important; }
+html:not([data-lang="en"]) .en{ display: none !important; }
+
+/* ============================================================
+   顶栏
+   ============================================================ */
+.topbar{
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 50;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-inner{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 10px var(--pad-x);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+.brand .tick{
+  display: inline-block;
+  width: 3px; height: 13px;
+  border-radius: 2px;
+  background: linear-gradient(var(--alpha) 0 50%, var(--beta) 50% 100%);
+  margin-right: 8px;
+  vertical-align: -1px;
+}
+.brand-sub{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  display: none;
+}
+@media (min-width: 620px){ .brand-sub{ display: inline; } }
+
+.topbar-spacer{ flex: 1; }
+
+.langtoggle{
+  display: inline-flex;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface);
+  flex: none;
+}
+.langtoggle button{
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.langtoggle button[aria-pressed="true"]{
+  background: var(--ink);
+  color: var(--ground);
+}
+.langtoggle button:not([aria-pressed="true"]):hover{ background: var(--surface-2); }
+
+.progress{
+  position: absolute;
+  left: 0; bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--alpha), var(--beta));
+  width: 0%;
+  transition: width .1s linear;
+}
+
+/* ============================================================
+   布局
+   ============================================================ */
+.shell{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--pad-x) 96px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 1020px){
+  .shell{ grid-template-columns: 210px minmax(0,1fr); gap: 56px; }
+}
+
+.rail{ display: none; }
+@media (min-width: 1020px){
+  .rail{
+    display: block;
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 62px);
+    align-self: start;
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    padding: 28px 0;
+    font-size: 13px;
+  }
+}
+.rail-title{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.rail ol{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.rail a{
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  text-decoration: none;
+  line-height: 1.5;
+  border-left: 2px solid transparent;
+}
+.rail a:hover{ background: var(--surface-2); color: var(--ink); }
+.rail a.active{
+  color: var(--ink);
+  font-weight: 500;
+  border-left-color: var(--alpha);
+  background: var(--surface-2);
+}
+.rail .num{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  flex: none;
+  padding-top: 2px;
+}
+
+main{ min-width: 0; padding-top: 8px; }
+
+/* ============================================================
+   英雄区
+   ============================================================ */
+.hero{ padding: 44px 0 34px; border-bottom: 1px solid var(--rule); }
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+}
+.eyebrow .dot{ width: 3px; height: 3px; border-radius: 50%; background: var(--ink-3); }
+
+.hero h1{
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 3.1rem);
+  letter-spacing: -.02em;
+  max-width: 22ch;
+}
+.hero .paper-title{
+  margin-top: 18px;
+  font-size: clamp(.95rem, .88rem + .3vw, 1.06rem);
+  color: var(--ink-2);
+  max-width: 60ch;
+  line-height: 1.7;
+}
+.hero .paper-title .en{ font-style: italic; }
+.hero .thesis{
+  margin-top: 26px;
+  font-family: var(--font-display);
+  font-size: clamp(1.04rem, .95rem + .5vw, 1.24rem);
+  line-height: 1.75;
+  max-width: 46ch;
+  padding-left: 20px;
+  border-left: 3px solid var(--alpha);
+}
+.hero .thesis .b{ color: var(--alpha-deep); font-weight: 600; }
+.hero .thesis .o{ color: var(--beta-deep); font-weight: 600; }
+
+.byline{
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.byline .mono{ font-size: 12px; color: var(--ink-3); }
+
+/* ============================================================
+   通用区块
+   ============================================================ */
+section{ scroll-margin-top: 80px; padding-top: 52px; }
+
+.chapter-head{
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 26px;
+}
+.chapter-num{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--alpha);
+  letter-spacing: .08em;
+  flex: none;
+  padding-top: 3px;
+}
+.chapter-head h2{ font-size: clamp(1.3rem, 1.1rem + .9vw, 1.62rem); letter-spacing: -.01em; }
+
+/* 正文栏不设宽度上限，改由文字类子元素各自限宽——
+   这样图、表、统计面板可以突破文字栏、占满整栏，文字仍是舒适阅读宽度。 */
+.prose{ display: flex; flex-direction: column; gap: 16px; }
+.prose > p,
+.prose > ul,
+.prose > ol,
+.prose > h3,
+.prose > .callout,
+.prose > .lede{ max-width: var(--measure); }
+.prose p{ color: var(--ink); }
+.prose ul, .prose ol{ margin: 0; padding-left: 1.35em; display: flex; flex-direction: column; gap: 8px; }
+.prose li::marker{ color: var(--ink-3); }
+.prose h3{
+  font-size: 1.06rem;
+  margin-top: 14px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.prose h3:first-child{ margin-top: 0; }
+.prose > figure{ margin-left: 0; margin-right: 0; }
+
+.lede{ font-size: 1.02rem; color: var(--ink-2); }
+
+/* 行内标记 */
+.tag-alpha, .tag-beta{
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: .82em;
+  font-weight: 500;
+  padding: 1px 7px;
+  border-radius: 3px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.tag-alpha{ background: var(--alpha-soft); color: var(--alpha-deep); border: 1px solid var(--alpha-line); }
+.tag-beta{ background: var(--beta-soft); color: var(--beta-deep); border: 1px solid var(--beta-line); }
+
+.key{ font-family: var(--font-mono); font-size: .88em; background: var(--surface-2); border: 1px solid var(--rule-soft); border-radius: 3px; padding: 1px 5px; color: var(--ink); }
+
+/* ============================================================
+   速览卡片
+   ============================================================ */
+.factgrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 26px;
+}
+@media (min-width: 640px){ .factgrid{ grid-template-columns: 168px minmax(0,1fr); } }
+.factgrid dt{
+  background: var(--surface-2);
+  padding: 11px 16px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.factgrid dd{
+  background: var(--surface);
+  margin: 0;
+  padding: 11px 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* 双栏主张 */
+.claims{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+@media (min-width: 720px){ .claims{ grid-template-columns: 1fr 1fr; } }
+.claim{
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 3px solid transparent;
+}
+.claim.a{ border-top-color: var(--alpha); }
+.claim.b{ border-top-color: var(--beta); }
+.claim-label{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.claim.a .claim-label{ color: var(--alpha-deep); }
+.claim.b .claim-label{ color: var(--beta-deep); }
+.claim h4{ font-size: 1rem; }
+.claim p{ font-size: 13.5px; color: var(--ink-2); line-height: 1.75; }
+
+/* ============================================================
+   图 / 图注
+   ============================================================ */
+figure{
+  margin: 26px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 20px 18px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.figure-scroll{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+figure svg{ display: block; max-width: 100%; height: auto; color: var(--ink); }
+figure svg.wide{ min-width: 660px; }
+figcaption{
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+figcaption .figlabel{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink);
+  font-weight: 600;
+  margin-right: 6px;
+}
+figcaption .note{ color: var(--ink-3); }
+
+/* 图例 */
+.legend{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin-bottom: 12px;
+  align-items: center;
+}
+.legend span{ display: inline-flex; align-items: center; gap: 7px; }
+.legend i{ width: 11px; height: 11px; border-radius: 2px; flex: none; }
+.legend i.a{ background: var(--alpha); }
+.legend i.b{ background: var(--beta); }
+.legend i.thr{ width: 14px; height: 0; border-top: 2px dashed var(--ink-3); border-radius: 0; }
+
+/* ============================================================
+   数字面板
+   ============================================================ */
+.stats{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 24px;
+}
+.stat{ background: var(--surface); padding: 15px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+.stat .v{
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+.stat .v.a{ color: var(--alpha-deep); }
+.stat .v.b{ color: var(--beta-deep); }
+.stat .k{ font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+.stat .sub{ font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+
+/* ============================================================
+   表格
+   ============================================================ */
+.tablewrap{ overflow-x: auto; margin-top: 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+table{ border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 480px; }
+th, td{ text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; line-height: 1.65; }
+thead th{
+  background: var(--surface-2);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+tbody tr:last-child td{ border-bottom: 0; }
+tbody tr:hover{ background: var(--surface-2); }
+td .mono{ font-size: 12.5px; }
+td.num{ font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ============================================================
+   提示块
+   ============================================================ */
+.callout{
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink-3);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 16px 20px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.callout .ct{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.callout p, .callout li{ font-size: 14px; color: var(--ink-2); line-height: 1.8; }
+.callout ul{ margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; }
+.callout.info{ border-left-color: var(--alpha); }
+.callout.info .ct{ color: var(--alpha-deep); }
+.callout.warn{ border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.warn .ct{ color: var(--warn); }
+.callout.read{ border-left-color: var(--beta); }
+.callout.read .ct{ color: var(--beta-deep); }
+
+/* 原文指路 */
+.ref{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  border: 1px dashed var(--rule);
+  border-radius: 3px;
+  padding: 1px 7px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* ============================================================
+   术语表
+   ============================================================ */
+.glossary-tools{ margin: 22px 0 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.glossary-tools input{
+  flex: 1 1 220px;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 9px 13px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+}
+.glossary-tools input::placeholder{ color: var(--ink-3); }
+.glossary-count{ font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.glossary{ display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; }
+.gterm{ background: var(--surface); padding: 13px 16px; display: grid; grid-template-columns: 1fr; gap: 3px 18px; }
+@media (min-width: 700px){ .gterm{ grid-template-columns: 210px minmax(0,1fr); } }
+.gterm .gz{ font-weight: 500; font-size: 14px; color: var(--ink); }
+.gterm .ge{ font-family: var(--font-mono); font-size: 12px; color: var(--alpha-deep); letter-spacing: .01em; }
+.gterm .gd{ font-size: 13.5px; color: var(--ink-2); line-height: 1.75; }
+.gterm[hidden]{ display: none; }
+
+/* ============================================================
+   自测
+   ============================================================ */
+.quiz{ display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+details{
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+details[open]{ border-color: var(--alpha-line); }
+summary{
+  cursor: pointer;
+  padding: 14px 18px;
+  font-size: 14.5px;
+  font-weight: 500;
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  line-height: 1.65;
+}
+summary::-webkit-details-marker{ display: none; }
+summary::before{
+  content: "Q";
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--alpha);
+  border: 1px solid var(--alpha-line);
+  background: var(--alpha-soft);
+  border-radius: 3px;
+  padding: 1px 6px;
+  flex: none;
+}
+summary:hover{ background: var(--surface-2); }
+details .answer{
+  padding: 0 18px 16px 18px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.85;
+  border-top: 1px solid var(--rule-soft);
+  padding-top: 14px;
+  margin-top: 0;
+}
+details .answer .lbl{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: 6px;
+}
+details .answer p{ margin-bottom: 10px; }
+details .answer p:last-child{ margin-bottom: 0; }
+
+/* ============================================================
+   页脚
+   ============================================================ */
+footer{
+  border-top: 1px solid var(--rule);
+  margin-top: 60px;
+  padding: 30px 0 10px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.9;
+}
+footer .cite{
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+  line-height: 1.85;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+html{ scroll-behavior: smooth; }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="tick"></span>Alpha 与 Beta 的分工</div>
+    <span class="brand-sub">Di et al. 2026 · 精读手册</span>
+    <div class="topbar-spacer"></div>
+    <div class="langtoggle" role="group" aria-label="语言 / Language">
+      <button type="button" id="btn-zh" aria-pressed="true">中文</button>
+      <button type="button" id="btn-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<div class="shell">
+
+  <nav class="rail" aria-label="章节目录">
+    <div class="rail-title"><span class="zh">目录</span><span class="en">Contents</span></div>
+    <ol id="rail-list"></ol>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 英雄区 ===================== -->
+    <div class="hero">
+      <div class="eyebrow">
+        <span>Current Biology</span><span class="dot"></span>
+        <span>2026 · 36 · 1–10</span><span class="dot"></span>
+        <span class="mono">10.1016/j.cub.2026.08.041</span>
+      </div>
+      <h1>
+        <span class="zh">Alpha 与 Beta 的分工</span>
+        <span class="en">The Division of Labour Between Alpha and Beta</span>
+      </h1>
+      <p class="paper-title">
+        <span class="zh">不同的振荡神经节律支持工作记忆中的表征精度与信心</span>
+        <span class="en">Distinct oscillatory neural rhythms support representational precision and confidence in working memory</span>
+      </p>
+      <p class="thesis">
+        <span class="zh">大脑用两条不同的节律分别记账：<span class="b">alpha 波</span>承载"我记得的东西有多清楚"，<span class="o">beta 波</span>承载"我整体上有多少把握"。前者是概率分布，后者是一个持续漂移的标量。</span>
+        <span class="en">The brain keeps two separate ledgers. <span class="b">Alpha</span> carries <em>how clearly</em> you remember the item — a full probability distribution. <span class="o">Beta</span> carries <em>how sure</em> you feel overall — a single scalar that drifts slowly across trials.</span>
+      </p>
+      <div class="byline">
+        <span><span class="zh">作者</span><span class="en">Authors</span>：Yang Di, Xingwei An, Hsin-Hung Li</span>
+        <span class="mono">14 participants · 62-ch EEG</span>
+      </div>
+    </div>
+
+    <!-- ===================== 使用说明 ===================== -->
+    <section id="howto">
+      <div class="chapter-head">
+        <div class="chapter-num">00</div>
+        <h2><span class="zh">怎么用这本手册</span><span class="en">How to use this manual</span></h2>
+      </div>
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这本手册的目标很具体：读完它，你应该能直接打开原文，从头读到尾而不卡壳——包括摘要、结果段的每一句统计报告、以及全部图注。</span>
+          <span class="en">The goal is concrete: after working through this, you should be able to open the original paper and read it end to end without stalling — the abstract, every statistical sentence in Results, and all figure legends.</span>
+        </p>
+        <p>
+          <span class="zh">它按<strong>原文的论证顺序</strong>编排，而不是按知识点罗列。每一章都标注了对应的原文位置（<span class="ref">Figure 2F</span> 这样的标签），你可以对照着读。如果你只有 20 分钟，读第 01、04、05 章就够抓住骨架；如果要精读，按顺序走完。</span>
+          <span class="en">It follows the paper's own argument order rather than listing topics. Each chapter points at where it comes from in the original (labels like <span class="ref">Figure 2F</span>), so you can read them side by side. With 20 minutes, read chapters 01, 04 and 05 for the skeleton. For a close read, go in order.</span>
+        </p>
+      </div>
+      <div class="claims">
+        <div class="claim a">
+          <div class="claim-label"><span class="zh">读完你能做到</span><span class="en">You will be able to</span></div>
+          <p><span class="zh">解释贝叶斯解码如何从脑电功率里读出"记忆的不确定性"，以及为什么后验分布的<strong>宽度</strong>可以当作神经层面的不确定性指标。</span><span class="en">Explain how Bayesian decoding recovers memory uncertainty from EEG power, and why the <strong>width</strong> of the posterior is a neural index of uncertainty.</span></p>
+        </div>
+        <div class="claim b">
+          <div class="claim-label"><span class="zh">读完你能做到</span><span class="en">You will be able to</span></div>
+          <p><span class="zh">分清"表征精度"和"标量信心"这两种不确定性格式的区别，并说明作者是用什么证据把二者分配到两个频段上的。</span><span class="en">Tell apart representational precision and a scalar confidence signal, and say what evidence let the authors assign each to a different frequency band.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 速览 ===================== -->
+    <section id="glance">
+      <div class="chapter-head">
+        <div class="chapter-num">01</div>
+        <h2><span class="zh">论文速览</span><span class="en">At a glance</span></h2>
+      </div>
+
+      <dl class="factgrid">
+        <dt><span class="zh">完整标题</span><span class="en">Full title</span></dt>
+        <dd><span class="zh">不同的振荡神经节律支持工作记忆中的表征精度与信心</span><span class="en">Distinct oscillatory neural rhythms support representational precision and confidence in working memory</span></dd>
+
+        <dt><span class="zh">作者与单位</span><span class="en">Authors</span></dt>
+        <dd><span class="zh">Yang Di<sup>1,2</sup>、Xingwei An<sup>1</sup>、Hsin-Hung Li<sup>2,3</sup>（通讯作者）<br><span class="mono" style="font-size:12px;color:var(--ink-3)">1 天津大学医学工程与转化医学研究院 · 2 美国俄亥俄州立大学心理学系</span></span><span class="en">Yang Di<sup>1,2</sup>, Xingwei An<sup>1</sup>, Hsin-Hung Li<sup>2,3</sup> (lead contact)<br><span class="mono" style="font-size:12px;color:var(--ink-3)">1 Tianjin University · 2,3 The Ohio State University</span></span></dd>
+
+        <dt><span class="zh">期刊与时间</span><span class="en">Journal</span></dt>
+        <dd><span class="zh">Current Biology, 第 36 卷, 1–10 页, 2026 年 10 月 5 日</span><span class="en">Current Biology, vol. 36, pp. 1–10, 5 October 2026</span></dd>
+
+        <dt><span class="zh">投稿历程</span><span class="en">Timeline</span></dt>
+        <dd><span class="mono" style="font-size:12.5px">Received 2026-04-08 → Revised 2026-07-15 → Accepted 2026-08-14</span></dd>
+
+        <dt><span class="zh">被试</span><span class="en">Participants</span></dt>
+        <dd><span class="zh">14 人（7 名男性，22–28 岁），全部右利手，视力正常或矫正正常</span><span class="en">14 people (7 male, 22–28 years), all right-handed, normal or corrected-to-normal vision</span></dd>
+
+        <dt><span class="zh">方法</span><span class="en">Methods</span></dt>
+        <dd><span class="zh">脑电（62 导）+ 空间工作记忆任务 + 逐试次不确定性报告</span><span class="en">EEG (62 channels) + spatial working memory task with trial-by-trial uncertainty reports</span></dd>
+
+        <dt><span class="zh">数据与代码</span><span class="en">Data &amp; code</span></dt>
+        <dd><span class="mono" style="font-size:12.5px">osf.io/t96rn</span> — <span class="zh">已去标识的预处理数据与全部分析代码，发表之日起公开</span><span class="en">de-identified preprocessed data and all analysis code, public as of publication</span></dd>
+      </dl>
+
+      <div class="prose">
+        <p>
+          <span class="zh">这篇文章要回答一个问题：<strong>当你不确定自己记得对不对的时候，大脑里是"什么"在表示这份不确定？</strong></span>
+          <span class="en">The paper asks one question: <strong>when you are unsure whether you remember something correctly, what in the brain represents that uncertainty?</strong></span>
+        </p>
+        <p>
+          <span class="zh">作者提出可能存在两种格式。第一种，记忆本身就以概率分布的形式存着，分布的<strong>宽度</strong>就是不确定性的来源——这是"表征精度"。第二种，大脑额外维护一个<strong>标量</strong>，像一根信心温度计的读数，不携带具体记了什么，只表示总体把握。他们用脑电找到了前者在 alpha 频段、后者在 beta 频段的证据。</span>
+          <span class="en">They propose two possible formats. First, the memory itself may be stored as a probability distribution whose <strong>width</strong> is the source of uncertainty — representational precision. Second, the brain may maintain an extra <strong>scalar</strong>, a confidence thermometer reading that carries no information about what was remembered, only overall certainty. Using EEG, they found the first in the alpha band and the second in the beta band.</span>
+        </p>
+      </div>
+
+      <div class="claims">
+        <div class="claim a">
+          <div class="claim-label">Alpha · 8–13 Hz</div>
+          <h4><span class="zh">概率性的记忆表征</span><span class="en">A probabilistic mnemonic code</span></h4>
+          <p><span class="zh">记忆内容可以从 alpha 功率中解码出来；而且解码得到的后验分布<strong>越宽</strong>，被试随后报告的不确定性<strong>越大</strong>。</span><span class="en">Memory content is decodable from alpha power, and the <strong>wider</strong> the decoded posterior, the <strong>more uncertain</strong> the participant later reports being.</span></p>
+        </div>
+        <div class="claim b">
+          <div class="claim-label">Beta · 14–30 Hz</div>
+          <h4><span class="zh">标量的信心信号</span><span class="en">A scalar confidence signal</span></h4>
+          <p><span class="zh">beta 功率直接预测不确定性报告的数值，而且这个信号<strong>整场都存在</strong>——刺激出现之前就有，并且能"预测"上一试次的不确定性。</span><span class="en">Beta power predicts the reported uncertainty value directly. The signal is present <strong>throughout the trial</strong> — even before stimulus onset — and predicts the <em>previous</em> trial's uncertainty.</span></p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="ct"><span class="zh">关键词</span><span class="en">Keywords</span></div>
+        <p><span class="zh">工作记忆 uncertainty（不确定性）· 元认知 metacognition · 神经振荡 neural oscillations · alpha 频段 · beta 频段 · 概率性群体编码 probabilistic population code · 贝叶斯解码 Bayesian decoding · 序列依赖 serial dependence</span><span class="en">working memory · uncertainty · metacognition · neural oscillations · alpha band · beta band · probabilistic population code · Bayesian decoding · serial dependence</span></p>
+      </div>
+    </section>
+
+    <!-- ===================== 背景 ===================== -->
+    <section id="bg">
+      <div class="chapter-head">
+        <div class="chapter-num">02</div>
+        <h2><span class="zh">背景：先弄懂六个概念</span><span class="en">Background: six ideas you need first</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这一章是投资。原文的引言部分默认你已经知道这些，所以写得非常压缩。下面把每个概念展开到你读原文不会卡住的程度。</span>
+          <span class="en">This chapter is an investment. The paper's introduction assumes you already know these and is written very densely. Here each one is opened up enough that the original won't stall you.</span>
+        </p>
+
+        <h3><span class="zh">① 工作记忆（Working memory）</span><span class="en">① Working memory</span></h3>
+        <p>
+          <span class="zh">指在刺激消失之后，把信息"端在手上"维持几秒的能力。它是所有需要"记住刚才看到什么再做决定"的行为的基础。</span>
+          <span class="en">The ability to hold information "in hand" for a few seconds after a stimulus disappears. It underlies any behaviour that requires remembering what you just saw before deciding.</span>
+        </p>
+        <p>
+          <span class="zh">关键在于：这份维持是<strong>有噪声</strong>的。同一个刺激重复呈现，记忆的准确度每次都不一样——这就是本文的出发点。原文用 "inherently noisy and variable" 描述这一点，并引用 Fougnie 等 (2012)、van den Berg 等 (2012) 证明<em>编码精度本身的波动</em>就能解释工作记忆的容量限制。</span>
+          <span class="en">Crucially, maintenance is <strong>noisy</strong>. Present the same stimulus repeatedly and accuracy differs every time — this is the paper's starting point. The original calls it "inherently noisy and variable" and cites Fougnie et al. (2012) and van den Berg et al. (2012) showing that <em>fluctuations in encoding precision itself</em> account for working memory limits.</span>
+        </p>
+
+        <h3><span class="zh">② 表征精度（Representational precision）</span><span class="en">② Representational precision</span></h3>
+        <p>
+          <span class="zh">这是全文最核心的概念，务必分清它和"准确度"的区别。</span>
+          <span class="en">This is the paper's central concept. Be careful to separate it from "accuracy".</span>
+        </p>
+        <ul>
+          <li><span class="zh"><strong>准确度（accuracy）</strong>：你记的位置离真实位置<em>偏了多远</em>。可以有一个方向性的偏差。</span><span class="en"><strong>Accuracy</strong> — how <em>far off</em> your remembered location is. It can have a directional bias.</span></li>
+          <li><span class="zh"><strong>精度（precision）</strong>：你的记忆<em>有多集中</em>。精度低意味着分布很散，但你未必偏向某个方向。</span><span class="en"><strong>Precision</strong> — how <em>concentrated</em> your memory is. Low precision means a spread-out distribution, but not necessarily biased in any direction.</span></li>
+        </ul>
+        <p>
+          <span class="zh">打个比方：往靶子上扔飞镖。<em>准确度</em>是飞镖群的中心离靶心多远；<em>精度</em>是这堆飞镖本身散得有多开。本文关心的是后者——因为"散得开"正是"不确定"的数学含义。</span>
+          <span class="en">Think of darts. <em>Accuracy</em> is how far the centre of the cluster is from the bullseye; <em>precision</em> is how tightly the darts themselves cluster. The paper cares about the latter, because "spread out" is exactly what uncertainty means mathematically.</span>
+        </p>
+        <p>
+          <span class="zh">在概率性编码的框架下，大脑维持的不是一个点估计（"位置在 137°"），而是一整个<strong>概率分布</strong>（"最可能是 137°，但 130°–145° 也有可能"）。这个分布的宽度，就是表征精度；宽度越大，表征越不精确。</span>
+          <span class="en">In a probabilistic coding framework, the brain maintains not a point estimate ("the location is at 137°") but a whole <strong>probability distribution</strong> ("most likely 137°, but 130°–145° is plausible too"). That distribution's width <em>is</em> the representational precision, and a wider distribution means a less precise representation.</span>
+        </p>
+
+        <h3><span class="zh">③ 不确定性 vs 信心（Uncertainty / Confidence）</span><span class="en">③ Uncertainty vs confidence</span></h3>
+        <p>
+          <span class="zh">两者是同一枚硬币的两面：不确定性高 ≈ 信心低。理论上它们可以是不同的量（Pouget 等 2016 专门论证过），但在本文这样的<strong>连续估计任务</strong>里，作者明确声明不区分这两个词（原文：<em>"we do not distinguish between the two terms for the present continuous estimation task"</em>）。你读的时候不必纠结用词。</span>
+          <span class="en">They are two faces of one coin: high uncertainty ≈ low confidence. Theoretically they can be distinct quantities (Pouget et al. 2016 argue exactly this), but in a <strong>continuous estimation task</strong> like this one the authors explicitly decline to distinguish them (original: <em>"we do not distinguish between the two terms for the present continuous estimation task"</em>). Don't get stuck on the wording.</span>
+        </p>
+
+        <h3><span class="zh">④ 元认知与元记忆（Metacognition / Metamemory）</span><span class="en">④ Metacognition / metamemory</span></h3>
+        <p>
+          <span class="zh">"关于自己认知的认知"——你不仅记得东西，还能评估自己记得多好。评估<em>记忆</em>质量的那部分叫<strong>元记忆</strong>。本文标题里的 "confidence"、摘要里的 "metacognitive access to working memory"，说的都是这件事。</span>
+          <span class="en">"Cognition about one's own cognition" — you don't just remember; you can also judge how well you remember. The part that judges <em>memory</em> quality is <strong>metamemory</strong>. The paper's "confidence" and "metacognitive access to working memory" both refer to this.</span>
+        </p>
+        <p>
+          <span class="zh">为什么这重要：如果大脑无法追踪自己的不确定性，人就无法做出适应性行为——比如决定"这个我拿不准，得再看一眼"。</span>
+          <span class="en">Why it matters: without tracking its own uncertainty, an organism could not behave adaptively — deciding, say, to check again because it isn't sure.</span>
+        </p>
+
+        <h3><span class="zh">⑤ 神经振荡与频段（Neural oscillations）</span><span class="en">⑤ Neural oscillations and frequency bands</span></h3>
+        <p>
+          <span class="zh">脑电记录到的是大量神经元同步活动产生的<strong>节律性电位波动</strong>。按频率划分成几个经典频段，每个频段被认为对应不同的计算功能（Fries 2015; Buzsáki &amp; Vöröslakos 2023）。本文只涉及三个：</span>
+          <span class="en">EEG records <strong>rhythmic voltage fluctuations</strong> produced by the synchronised activity of large neuronal populations. It is divided into classic frequency bands, each linked to different computations (Fries 2015; Buzsáki &amp; Vöröslakos 2023). This paper uses three:</span>
+        </p>
+
+        <figure>
+          <div class="figure-scroll">
+            <svg viewBox="0 0 700 176" role="img" aria-label="本文涉及的三个频段：theta 2–7 Hz、alpha 8–13 Hz、beta 14–30 Hz，以及它们各自对应的角色" class="wide">
+              <defs>
+                <marker id="axarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+                </marker>
+              </defs>
+
+              <!-- 轴 -->
+              <line x1="60" y1="112" x2="660" y2="112" stroke="currentColor" stroke-width="1.5" marker-end="url(#axarrow)" opacity="0.75"/>
+              <text x="660" y="131" font-size="12" fill="currentColor" text-anchor="end" font-family="'IBM Plex Mono',monospace" opacity="0.6">Hz</text>
+
+              <!-- 刻度 -->
+              <g font-family="'IBM Plex Mono',monospace" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.55">
+                <line x1="60" y1="112" x2="60" y2="118" stroke="currentColor" stroke-width="1"/><text x="60" y="134">0</text>
+                <line x1="180" y1="112" x2="180" y2="118" stroke="currentColor" stroke-width="1"/><text x="180" y="134">10</text>
+                <line x1="300" y1="112" x2="300" y2="118" stroke="currentColor" stroke-width="1"/><text x="300" y="134">20</text>
+                <line x1="420" y1="112" x2="420" y2="118" stroke="currentColor" stroke-width="1"/><text x="420" y="134">30</text>
+                <line x1="540" y1="112" x2="540" y2="118" stroke="currentColor" stroke-width="1"/><text x="540" y="134">40</text>
+                <line x1="660" y1="112" x2="660" y2="118" stroke="currentColor" stroke-width="1"/>
+              </g>
+
+              <!-- 频段带 (每 Hz = 12px，起点 x=60) -->
+              <!-- theta 2-7 -->
+              <rect x="84" y="86" width="60" height="18" rx="3" fill="var(--surface-3)"/>
+              <text x="114" y="99" font-size="11.5" text-anchor="middle" fill="currentColor" font-family="'IBM Plex Mono',monospace">2–7</text>
+              <text x="114" y="76" font-size="11.5" text-anchor="middle" fill="currentColor" opacity="0.6">theta</text>
+
+              <!-- alpha 8-13 -->
+              <rect x="156" y="86" width="60" height="18" rx="3" fill="var(--alpha)"/>
+              <text x="186" y="99" font-size="11.5" text-anchor="middle" fill="#fff" font-family="'IBM Plex Mono',monospace" font-weight="600">8–13</text>
+              <text x="186" y="76" font-size="11.5" text-anchor="middle" fill="var(--alpha)" font-weight="600">alpha</text>
+
+              <!-- beta 14-30 -->
+              <rect x="228" y="86" width="192" height="18" rx="3" fill="var(--beta)"/>
+              <text x="324" y="99" font-size="11.5" text-anchor="middle" fill="#fff" font-family="'IBM Plex Mono',monospace" font-weight="600">14–30</text>
+              <text x="324" y="76" font-size="11.5" text-anchor="middle" fill="var(--beta)" font-weight="600">beta</text>
+
+              <!-- 角色说明 -->
+              <g font-size="12" fill="currentColor">
+                <text x="84" y="158" opacity="0.75">未发现可靠解码</text>
+                <text x="156" y="158" fill="var(--alpha)" font-weight="600">记忆内容 + 精度</text>
+                <text x="240" y="158" fill="var(--beta)" font-weight="600">标量信心</text>
+              </g>
+              <line x1="60" y1="144" x2="660" y2="144" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+            </svg>
+          </div>
+          <figcaption>
+            <span class="figlabel"><span class="zh">图 1</span><span class="en">Fig 1</span></span>
+            <span class="zh">本文涉及的三个频段及其在文中的角色。theta 与 beta 都被当作 alpha 的对照来分析，这是本文论证严密的地方之一——不是只报告"有效应"的频段。</span>
+            <span class="en">The three bands this paper uses and the role each plays. Theta and beta both serve as controls against alpha — the paper does not only report the band that "worked".</span>
+          </figcaption>
+        </figure>
+
+        <h3><span class="zh">⑥ 概率性群体编码与贝叶斯解码</span><span class="en">⑥ Probabilistic population codes and Bayesian decoding</span></h3>
+        <p>
+          <span class="zh">这是理解第 04 章的技术前提。核心思路是：大脑用<strong>一大群神经元的整体活动模式</strong>来表示一个变量，而不仅仅是一个神经元的放电率。这样的群体活动天然地对应一个概率分布——分布的峰值是"最可能的值"，宽度是"有多不确定"（Ma 等 2006; Jazayeri &amp; Movshon 2006）。</span>
+          <span class="en">This is the technical prerequisite for chapter 04. The core idea: the brain represents a variable through the <strong>collective activity pattern of a population</strong>, not a single neuron's firing rate. Such population activity naturally maps onto a probability distribution — its peak is the most likely value, its width is how uncertain (Ma et al. 2006; Jazayeri &amp; Movshon 2006).</span>
+        </p>
+        <p>
+          <span class="zh">研究者做的事情叫<strong>解码</strong>（decoding）：反过来，从观测到的一堆电极活动，推断出"被试最可能在记哪个位置，以及这个推断有多不确定"。本文用的是 TAFKAP 算法（van Bergen &amp; Jehee 2019, 2021）——先建立"位置 → 脑电模式"的生成模型，再用贝叶斯定理反推"脑电模式 → 位置的后验分布"。</span>
+          <span class="en">What the researchers do is <strong>decoding</strong>: working backwards from a set of electrode activities to "which location is the participant most likely holding, and how uncertain is that inference". This paper uses the TAFKAP algorithm (van Bergen &amp; Jehee 2019, 2021): build a generative model of "location → EEG pattern", then invert it with Bayes' rule to get "EEG pattern → posterior over locations".</span>
+        </p>
+
+        <figure>
+          <div class="figure-scroll">
+            <svg viewBox="0 0 700 250" role="img" aria-label="同一个解码位置、两种不同宽度的后验分布；窄的表示高精度低不确定性，宽的表示低精度高不确定性" class="wide">
+              <!-- 轴 -->
+              <line x1="70" y1="196" x2="650" y2="196" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+              <g font-family="'IBM Plex Mono',monospace" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.55">
+                <text x="70" y="216">0°</text>
+                <text x="215" y="216">90°</text>
+                <text x="360" y="216">180°</text>
+                <text x="505" y="216">270°</text>
+                <text x="650" y="216">360°</text>
+              </g>
+              <text x="360" y="240" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.7">记忆中的极角 · polar angle</text>
+
+              <!-- 宽后验 -->
+              <path d="M 200 196 C 260 196 285 60 360 60 C 435 60 460 196 520 196"
+                    fill="var(--beta-soft)" stroke="var(--beta)" stroke-width="2"/>
+              <!-- 窄后验 -->
+              <path d="M 285 196 C 330 196 342 24 360 24 C 378 24 390 196 435 196"
+                    fill="var(--alpha-soft)" stroke="var(--alpha)" stroke-width="2"/>
+
+              <!-- 峰值线 -->
+              <line x1="360" y1="24" x2="360" y2="196" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.4"/>
+              <text x="366" y="38" font-size="11.5" fill="currentColor" opacity="0.75" font-family="'IBM Plex Mono',monospace">后验均值 = 解码位置</text>
+
+              <!-- SD 标注 -->
+              <line x1="325" y1="120" x2="395" y2="120" stroke="var(--alpha)" stroke-width="1.5"/>
+              <line x1="325" y1="114" x2="325" y2="126" stroke="var(--alpha)" stroke-width="1.5"/>
+              <line x1="395" y1="114" x2="395" y2="126" stroke="var(--alpha)" stroke-width="1.5"/>
+              <text x="360" y="140" font-size="11.5" text-anchor="middle" fill="var(--alpha)" font-family="'IBM Plex Mono',monospace" font-weight="600">SD 小</text>
+
+              <line x1="255" y1="120" x2="465" y2="120" stroke="var(--beta)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <text x="465" y="112" font-size="11.5" text-anchor="end" fill="var(--beta)" font-family="'IBM Plex Mono',monospace" font-weight="600">SD 大</text>
+
+              <!-- 说明 -->
+              <text x="120" y="46" font-size="13" fill="var(--alpha)" font-weight="600">高精度 · 低不确定性</text>
+              <text x="120" y="66" font-size="12" fill="currentColor" opacity="0.7">→ 被试会画一条短弧</text>
+              <text x="120" y="96" font-size="13" fill="var(--beta)" font-weight="600">低精度 · 高不确定性</text>
+              <text x="120" y="116" font-size="12" fill="currentColor" opacity="0.7">→ 被试会画一条长弧</text>
+            </svg>
+          </div>
+          <figcaption>
+            <span class="figlabel"><span class="zh">图 2</span><span class="en">Fig 2</span></span>
+            <span class="zh">贝叶斯解码的两个输出。两种情况下<strong>后验均值相同</strong>（都指向 180° 附近），区别只在<strong>宽度</strong>。本文把标准差（SD）当作"神经不确定性"的指标，去和被试报告的不确定性做相关——这是全文第一条主线的全部逻辑。</span>
+            <span class="en">The two outputs of Bayesian decoding. The <strong>posterior mean is identical</strong> in both cases (both near 180°); only the <strong>width</strong> differs. The paper uses that standard deviation as its neural uncertainty index and correlates it against reported uncertainty — that is the entire logic of the paper's first main result.</span>
+            <span class="note"><span class="zh">依据原文 Figure 2A 与 STAR Methods 的贝叶斯解码部分绘制。</span><span class="en">Drawn from Figure 2A and the Bayesian decoding section of the STAR Methods.</span></span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===================== 范式 ===================== -->
+    <section id="task">
+      <div class="chapter-head">
+        <div class="chapter-num">03</div>
+        <h2><span class="zh">实验范式：怎么让被试"报告不确定性"</span><span class="en">The paradigm: getting people to report uncertainty</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这是本文设计上最聪明的地方。不确定性是主观的，你怎么让被试把它变成一个可以统计分析的数字？答案是<strong>赌局</strong>。</span>
+          <span class="en">This is the cleverest part of the design. Uncertainty is subjective — how do you turn it into a number you can analyse? The answer is a <strong>bet</strong>.</span>
+        </p>
+
+        <figure>
+          <div class="figure-scroll">
+            <svg viewBox="0 0 700 300" role="img" aria-label="单个试次的流程：注视1秒、目标点500毫秒、延迟2秒、鼠标报告位置、弧线报告不确定性、反馈点" class="wide">
+              <defs>
+                <marker id="tar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+                </marker>
+              </defs>
+
+              <!-- 时间轴 -->
+              <line x1="40" y1="120" x2="662" y2="120" stroke="currentColor" stroke-width="1.5" opacity="0.5" marker-end="url(#tar)"/>
+
+              <!-- 分段：1s注视 (40-140), 0.5s目标 (140-190), 2s延迟 (190-390), 报告期 (390-620), 反馈(620-660) -->
+              <rect x="140" y="106" width="50" height="28" fill="var(--beta)"/>
+              <text x="165" y="98" font-size="11.5" text-anchor="middle" fill="var(--beta)" font-family="'IBM Plex Mono',monospace" font-weight="600">500 ms</text>
+
+              <rect x="190" y="106" width="200" height="28" fill="var(--surface-3)"/>
+              <text x="290" y="98" font-size="11.5" text-anchor="middle" fill="currentColor" font-family="'IBM Plex Mono',monospace" opacity="0.8">2 s 延迟</text>
+
+              <rect x="390" y="106" width="230" height="28" fill="var(--alpha-soft)" stroke="var(--alpha-line)" stroke-width="1"/>
+              <text x="505" y="98" font-size="11.5" text-anchor="middle" fill="var(--alpha)" font-family="'IBM Plex Mono',monospace" font-weight="600">报告期</text>
+
+              <!-- 分段标签 -->
+              <g font-size="11" fill="currentColor" opacity="0.6" font-family="'IBM Plex Mono',monospace" text-anchor="middle">
+                <text x="90" y="146">1 s 注视</text>
+                <text x="165" y="146">目标</text>
+                <text x="290" y="146">维持</text>
+                <text x="470" y="146">位置</text>
+                <text x="570" y="146">弧线</text>
+              </g>
+
+              <!-- 步骤编号 -->
+              <g font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="var(--ink-3)">
+                <circle cx="165" cy="172" r="10" fill="var(--surface-2)" stroke="var(--rule)"/><text x="165" y="176" text-anchor="middle" fill="currentColor">1</text>
+                <circle cx="290" cy="172" r="10" fill="var(--surface-2)" stroke="var(--rule)"/><text x="290" y="176" text-anchor="middle" fill="currentColor">2</text>
+                <circle cx="455" cy="172" r="10" fill="var(--surface-2)" stroke="var(--rule)"/><text x="455" y="176" text-anchor="middle" fill="currentColor">3</text>
+                <circle cx="555" cy="172" r="10" fill="var(--surface-2)" stroke="var(--rule)"/><text x="555" y="176" text-anchor="middle" fill="currentColor">4</text>
+                <circle cx="640" cy="172" r="10" fill="var(--surface-2)" stroke="var(--rule)"/><text x="640" y="176" text-anchor="middle" fill="currentColor">5</text>
+              </g>
+
+              <!-- 说明 -->
+              <g font-size="12" fill="currentColor">
+                <text x="40" y="205" opacity="0.85">1　目标亮点出现在 10° 离心率处，极角从 32 个等距位置中伪随机抽取</text>
+                <text x="40" y="227" opacity="0.85">2　2 秒延迟，保持注视，尽量不眨眼</text>
+                <text x="40" y="249" opacity="0.85">3　用鼠标点击报告记住的位置（可用上下方向键微调，空格确认）</text>
+                <text x="40" y="271" opacity="0.85">4　屏幕出现一段弧线，用上下键调整长度，报告不确定性</text>
+                <text x="40" y="293" opacity="0.85">5　反馈点出现在真实位置；真值落在弧内才得分</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption>
+            <span class="figlabel"><span class="zh">图 3</span><span class="en">Fig 3</span></span>
+            <span class="zh">单试次流程，对照原文 Figure 1A 绘制。注意第 4 步：弧线的<strong>初始长度在 0°–20° 之间均匀随机</strong>——这一点在设计上是刻意的，第 07 章会解释为什么。</span>
+            <span class="en">One trial, redrawn from Figure 1A. Note step 4: the arc's <strong>initial length is uniformly random between 0° and 20°</strong> — a deliberate design choice explained in chapter 07.</span>
+          </figcaption>
+        </figure>
+
+        <h3><span class="zh">奖励机制：为什么弧长等于不确定性</span><span class="en">The reward rule: why arc length equals uncertainty</span></h3>
+        <p>
+          <span class="zh">规则是这样的。被试画完弧线之后，真实目标位置会以反馈点的方式显示出来：</span>
+          <span class="en">Here is the rule. After the participant draws the arc, the true target location is revealed as a feedback dot:</span>
+        </p>
+        <ul>
+          <li><span class="zh">如果真值<strong>落在弧内</strong>，得分为 <span class="key">100e<sup>−0.08d</sup></span>，其中 d 是弧的长度（度）。</span><span class="en">If the true location <strong>falls inside the arc</strong>, points awarded are <span class="key">100e<sup>−0.08d</sup></span>, where d is the arc length in degrees.</span></li>
+          <li><span class="zh">如果真值<strong>落在弧外</strong>，得 0 分。</span><span class="en">If it falls <strong>outside</strong>, zero points.</span></li>
+        </ul>
+        <p>
+          <span class="zh">这个函数随 d 单调递减，意味着<strong>弧画得越短，潜在奖励越高</strong>——但弧越短，真值落在里面的概率也越低。于是被试陷入一个权衡：</span>
+          <span class="en">The function decreases monotonically in d, so <strong>a shorter arc means a higher potential reward</strong> — but a shorter arc is also less likely to contain the target. The participant faces a trade-off:</span>
+        </p>
+        <ul>
+          <li><span class="zh">画太短 → 拿高分的概率太低，期望收益反而小。</span><span class="en">Too short → the chance of scoring at all becomes too low.</span></li>
+          <li><span class="zh">画太长 → 覆盖是稳了，但每题都只拿很少的分。</span><span class="en">Too long → you almost always score, but very little each time.</span></li>
+          <li><span class="zh"><strong>最优策略</strong>：正好按自己真实的不确定性来定弧长。</span><span class="en"><strong>Optimal strategy</strong>: set the arc exactly to your own true uncertainty.</span></li>
+        </ul>
+        <p>
+          <span class="zh">这就是所谓的<strong>激励相容</strong>（incentive-compatible）设计：只有当被试如实报告时收益才最大，所以弧长可以被当作一份可信的、量化的不确定性自陈。原文在 STAR Methods 里写明这套设计"旨在激励校准良好的不确定性报告"，并引用了本实验室先前的工作（Li 等 2021；Honig 等 2020；Yoo 等 2018）。</span>
+          <span class="en">This is an <strong>incentive-compatible</strong> design: payoffs are maximised only by honest reporting, so arc length can be treated as a trustworthy, quantified self-report of uncertainty. The STAR Methods state the reward was designed "to incentivize well-calibrated uncertainty reports", citing the lab's earlier work (Li et al. 2021; Honig et al. 2020; Yoo et al. 2018).</span>
+        </p>
+
+        <h3><span class="zh">行为结果：先证明这个任务真的有效</span><span class="en">Behavioural results: first, show the task actually works</span></h3>
+        <p>
+          <span class="zh">在动脑电之前，作者先验证了三件事（原文 Figure 1B–1E）：</span>
+          <span class="en">Before touching the EEG, the authors checked three things (Figure 1B–1E):</span>
+        </p>
+        <ul>
+          <li><span class="zh">记忆误差以目标位置为中心分布，可用 von Mises 分布很好拟合 <span class="ref">Fig 1B</span>——说明被试在认真做任务，没有系统性偏差。</span><span class="en">Memory errors centre on the true location and fit a von Mises distribution well <span class="ref">Fig 1B</span> — participants were engaged, with no systematic bias.</span></li>
+          <li><span class="zh">记忆相当精确 <span class="ref">Fig 1C</span>——只有一个目标、延迟又短，符合预期。</span><span class="en">Memory was quite precise <span class="ref">Fig 1C</span> — expected with a single target and a short delay.</span></li>
+          <li><span class="zh"><strong>关键</strong>：报告的弧长随记忆误差的增大而增大 <span class="ref">Fig 1D, 1E</span>——这条才真正说明被试对自己的记忆质量有元认知访问能力。</span><span class="en"><strong>The key one</strong>: reported arc length grows with the size of the memory error <span class="ref">Fig 1D, 1E</span> — this is what shows participants genuinely have metacognitive access to their own memory quality.</span></li>
+        </ul>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="v">20 × 32</div><div class="k"><span class="zh">每人 20 个 run，每个 run 32 试次</span><span class="en">20 runs × 32 trials per person</span></div><div class="sub">640 trials / person</div></div>
+        <div class="stat"><div class="v">8,546</div><div class="k"><span class="zh">最终进入分析的试次（剔除约 4%）</span><span class="en">trials retained (≈4% excluded)</span></div><div class="sub">of 8,960 collected</div></div>
+        <div class="stat"><div class="v">0°–20°</div><div class="k"><span class="zh">弧线初始长度的均匀随机范围</span><span class="en">uniform random initial arc length</span></div><div class="sub">decorrelates report &amp; motor</div></div>
+        <div class="stat"><div class="v">10°</div><div class="k"><span class="zh">目标点的固定离心率</span><span class="en">fixed target eccentricity</span></div><div class="sub">32 polar angles</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 方法 ===================== -->
+    <section id="methods">
+      <div class="chapter-head">
+        <div class="chapter-num">04</div>
+        <h2><span class="zh">方法工具箱</span><span class="en">The methods toolkit</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">原文的 STAR Methods 有 4 页，是全文最密集的部分。好消息是：你不需要会<em>做</em>这些分析，只需要知道每个工具<strong>用来回答什么问题</strong>。下面按工具组织。</span>
+          <span class="en">The STAR Methods run four pages and are the densest part of the paper. Good news: you do not need to be able to <em>run</em> these analyses, only to know <strong>what question each tool answers</strong>. Organised by tool below.</span>
+        </p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="zh">工具</span><span class="en">Tool</span></th>
+              <th><span class="zh">回答什么问题</span><span class="en">Answers the question</span></th>
+              <th><span class="zh">关键设置</span><span class="en">Key settings</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="zh">脑电记录</span><span class="en">EEG recording</span></td>
+              <td><span class="zh">拿到高时间分辨率的群体神经活动</span><span class="en">Population neural activity at high temporal resolution</span></td>
+              <td class="num">Neuroscan SynAmps2<br>62 Ag/AgCl · 1000 Hz<br>阻抗 &lt; 5 kΩ</td>
+            </tr>
+            <tr>
+              <td><span class="zh">预处理</span><span class="en">Preprocessing</span></td>
+              <td><span class="zh">去掉眼电、肌电等伪迹，留下干净的神经信号</span><span class="en">Remove ocular and muscle artefacts</span></td>
+              <td class="num">EEGLAB · 平均参考<br>50 Hz notch · 0.1–45 Hz<br>降采样 500 Hz · ICA</td>
+            </tr>
+            <tr>
+              <td><span class="zh">Welch 功率谱</span><span class="en">Welch PSD</span></td>
+              <td><span class="zh">把一段时间的信号变成"每个频段有多大能量"</span><span class="en">Turn a stretch of signal into power per frequency band</span></td>
+              <td class="num">0.5–1.5 s 延迟窗<br>Hann 窗 · FFT = 256</td>
+            </tr>
+            <tr>
+              <td><span class="zh">TAFKAP 贝叶斯解码</span><span class="en">TAFKAP Bayesian decoding</span></td>
+              <td><span class="zh">从脑电里读出"记的是什么位置"和"有多不确定"</span><span class="en">Read out <em>what</em> is remembered and <em>how uncertain</em></span></td>
+              <td class="num">8 个升余弦基函数<br>多元正态生成模型<br>留一 run 交叉验证</td>
+            </tr>
+            <tr>
+              <td><span class="zh">Ridge 回归</span><span class="en">Ridge regression</span></td>
+              <td><span class="zh">直接从脑电预测"不确定性报告的数值"</span><span class="en">Predict the uncertainty report's value directly from EEG</span></td>
+              <td class="num">L2 惩罚 · λ = 10<br>留一 run 交叉验证</td>
+            </tr>
+            <tr>
+              <td><span class="zh">sLORETA 源定位</span><span class="en">sLORETA source localisation</span></td>
+              <td><span class="zh">估计头皮信号来自大脑的哪个区域</span><span class="en">Estimate where on the cortex the scalp signal came from</span></td>
+              <td class="num">FreeSurfer fsaverage<br>oct6 源空间 · BEM<br>噪声取自 −0.5–−0.05 s</td>
+            </tr>
+            <tr>
+              <td><span class="zh">置换检验</span><span class="en">Permutation test</span></td>
+              <td><span class="zh">排除"相关是假象"的可能（见下）</span><span class="en">Rule out a spurious correlation (see below)</span></td>
+              <td class="num">2,000 次 · 打乱 run 身份<br>保留 run 内试次顺序</td>
+            </tr>
+            <tr>
+              <td><span class="zh">聚类置换检验</span><span class="en">Cluster-based permutation</span></td>
+              <td><span class="zh">在时间序列上做多重比较校正</span><span class="en">Correct for multiple comparisons across time</span></td>
+              <td class="num">Maris &amp; Oostenveld 2007<br>2,000 次 · 95 百分位</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose">
+        <h3><span class="zh">两个容易被忽略但很关键的设计</span><span class="en">Two design details that are easy to miss</span></h3>
+
+        <p>
+          <span class="zh"><strong>其一，为什么要"打乱 run 身份"而不是完全打乱？</strong>因为不确定性报告存在<em>序列依赖</em>（当前试次和上一试次相关，这正是本文的发现之一）。如果完全随机打乱，就会破坏这种真实的时间结构，置换检验的零分布就不对了。保留 run 内顺序、只打乱 run 的归属，可以在保留时间结构的前提下破坏"脑电与报告的真实对应"。这个细节说明作者很清楚自己数据的结构。</span>
+          <span class="en"><strong>First, why shuffle run identity rather than fully shuffling?</strong> Because uncertainty reports show <em>serial dependence</em> (current trial correlates with previous — one of this paper's own findings). A full shuffle would destroy that real temporal structure and make the null distribution wrong. Preserving within-run order while shuffling run assignment breaks the genuine EEG-to-report correspondence while keeping the temporal structure. The authors clearly understood their own data.</span>
+        </p>
+
+        <p>
+          <span class="zh"><strong>其二，散点图里的数据点不是试次。</strong>你在 Figure 1D、2D、2F 里看到的每个点，是<em>一个被试的一个分箱</em>，不是单个试次。做法是：先按 x 轴变量把每个被试的试次排序、等分成 8 箱，取每箱的均值；然后把每个被试的数值做均值中心化，再汇总。这么做是为了让图好看且不被个体差异淹没——但代价是<strong>图上的相关强度和统计检验的相关强度不是一回事</strong>。统计检验用的是逐试次的相关系数。这个区别在 STAR Methods 的 "Quantification and statistical analysis" 里写得很明确。</span>
+          <span class="en"><strong>Second, the dots in the scatter plots are not trials.</strong> Each dot in Figure 1D, 2D or 2F is <em>one bin from one participant</em>, not a single trial. Procedure: sort each participant's trials by the x-axis variable, split into 8 equal bins, take each bin's mean; mean-centre each participant's values; then pool. This makes the figure readable and stops individual differences swamping it — but the cost is that <strong>the correlation strength shown in the plot is not the one that was statistically tested</strong>. The test used trial-wise correlations. The STAR Methods spell this out under "Quantification and statistical analysis".</span>
+        </p>
+
+        <div class="callout warn">
+          <div class="ct"><span class="zh">读图提醒</span><span class="en">Reading caution</span></div>
+          <p><span class="zh">看到本文散点图上的 r 值或拟合线，不要直接和正文的 t 值对照——它们来自不同的计算层级。正文报告的 t(13) 才是推断统计的结果。</span><span class="en">Do not read an r or a fit line off a scatter plot here and compare it to the t values in the text — they come from different computational levels. The reported t(13) is the inferential result.</span></p>
+        </div>
+
+        <h3><span class="zh">关于"留一 run 交叉验证"</span><span class="en">On leave-one-run-out cross-validation</span></h3>
+        <p>
+          <span class="zh">所有解码和回归都用了同一个方案：用 19 个 run 训练，在第 20 个 run 上测试，轮换 20 次。这不是可选的细节——如果<strong>在同一批数据上训练又测试</strong>，模型总能"记住"答案，得到的相关性是虚高的。<span class="ref">STAR Methods</span> 里写明 20 个 run 对应 20 折。</span>
+          <span class="en">Every decoding and regression analysis uses the same scheme: train on 19 runs, test on the 20th, rotating 20 times. This is not optional detail — if you <strong>train and test on the same data</strong>, the model simply memorises the answers and the resulting correlation is inflated. The STAR Methods confirm 20 runs give 20 folds.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== 结果一 ===================== -->
+    <section id="r1">
+      <div class="chapter-head">
+        <div class="chapter-num">05</div>
+        <h2><span class="zh">结果一：alpha 承载概率性的记忆表征</span><span class="en">Result 1: alpha carries a probabilistic memory code</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这一章对应原文的 <span class="ref">Figure 2</span> 和 <span class="ref">Figures S1–S3</span>。论证分三步走，每一步都有独立的统计支持。</span>
+          <span class="en">This chapter covers <span class="ref">Figure 2</span> and <span class="ref">Figures S1–S3</span>. The argument proceeds in three steps, each with its own statistical support.</span>
+        </p>
+
+        <h3><span class="zh">第一步：记忆内容能不能从 alpha 里解码出来？</span><span class="en">Step 1: is memory content decodable from alpha at all?</span></h3>
+        <p>
+          <span class="zh">能。平均绝对解码误差为 <strong>80.5°</strong>，显著低于 90° 的机会水平：</span>
+          <span class="en">Yes. Mean absolute decoding error was <strong>80.5°</strong>, significantly below the 90° chance level:</span>
+        </p>
+        <p class="mono" style="font-size:14px;color:var(--alpha-deep);font-weight:600">t(13) = 6.42, p &lt; 0.001</p>
+        <p>
+          <span class="zh">在 14 名被试中有 12 名的解码误差在 0° 附近聚集，说明这不是个别被试驱动的效应（<span class="ref">Fig 2B</span>；个体结果见 <span class="ref">Figure S1</span>）。而且<strong>带符号的解码误差与带符号的记忆误差显著相关</strong>（<span class="ref">Fig 2D, 2E</span>）——也就是说，当解码器"猜偏"的方向和程度与被试真实记错的方向和程度一致时，才有资格说这个解码反映的是真实的记忆内容。</span>
+          <span class="en">In 12 of 14 participants decoding errors clustered near 0°, so the effect is not driven by a few individuals (<span class="ref">Fig 2B</span>; individual results in <span class="ref">Figure S1</span>). And the <strong>signed decoding error correlated with the signed memory error</strong> (<span class="ref">Fig 2D, 2E</span>) — the decoder's errors moved in the same direction and magnitude as the participant's own errors, which is what licenses the claim that it reflects real memory content.</span>
+        </p>
+
+        <div class="callout info">
+          <div class="ct"><span class="zh">为什么 80.5° 算是"解码成功"？</span><span class="en">Why is 80.5° a success?</span></div>
+          <p><span class="zh">因为极角是 0–360° 的圆周变量。如果解码器完全瞎猜，平均误差会是 90°。80.5° 虽然听起来离 90° 不远，但在 14 名被试上这个差异的 t 值高达 6.42——这是一个非常稳健的偏移。圆周变量的解码效应就是这样，不能拿线性变量的直觉去衡量。</span><span class="en">Because polar angle is a circular 0–360° variable. A decoder guessing blindly would average 90° error. 80.5° sounds close to 90°, but across 14 participants that gap produces t = 6.42 — a very robust shift. This is how decoding effects on circular variables behave; linear intuition does not transfer.</span></p>
+        </div>
+
+        <h3><span class="zh">第二步：解码出的不确定性，能预测被试报告的不确定性吗？</span><span class="en">Step 2: does decoded uncertainty predict reported uncertainty?</span></h3>
+        <p>
+          <span class="zh">能，这是本文第一条主线的核心结果：</span>
+          <span class="en">Yes — this is the core result of the paper's first主线:</span>
+        </p>
+        <p class="mono" style="font-size:14px;color:var(--alpha-deep);font-weight:600">t(13) = 2.32, p = 0.04　·　置换检验 p = 0.002</p>
+        <p>
+          <span class="zh">也就是说：<strong>从 alpha 功率解码出来的后验分布越宽，被试随后画的弧越长</strong>。记忆表征自身携带的概率信息可以直接用于元认知判断。</span>
+          <span class="en">In plain terms: <strong>the wider the posterior decoded from alpha power, the longer the arc the participant then drew</strong>. The probabilistic information in the memory representation itself feeds metacognitive judgement.</span>
+        </p>
+
+        <h3><span class="zh">第三步：解码器"行为良好"吗？</span><span class="en">Step 3: is the decoder well behaved?</span></h3>
+        <p>
+          <span class="zh">这是一个很讲究的检验。一个真正在做概率推断的解码器应该有个性质：<strong>当它输出的不确定性越大时，它的解码误差也应该越大</strong>。因为"我不确定"和"我容易错"本该是一回事。本文确实观察到了这个关系：</span>
+          <span class="en">A nice check. A decoder genuinely doing probabilistic inference should have a property: <strong>when its stated uncertainty is larger, its decoding error should also be larger</strong> — because "I'm unsure" and "I tend to be wrong" ought to be the same thing. The paper does observe this:</span>
+        </p>
+        <p class="mono" style="font-size:14px;color:var(--alpha-deep);font-weight:600">t(13) = 3.16, p = 0.008</p>
+        <p>
+          <span class="zh">原文称这是 "a signature for a well-behaved probabilistic decoder"（一个行为良好的概率解码器的标志）。做解码研究的人经常忘了做这个检验，本文把它当成正面证据来报告，值得学习。</span>
+          <span class="en">The original calls this "a signature for a well-behaved probabilistic decoder". Decoding studies often skip this check; here it is reported as positive evidence — worth learning from.</span>
+        </p>
+
+        <h3><span class="zh">对照组：其他频段都不行</span><span class="en">The controls: no other band works</span></h3>
+        <ul>
+          <li><span class="zh"><strong>theta（2–7 Hz）</strong>：没有观察到可靠解码。</span><span class="en"><strong>Theta (2–7 Hz)</strong>: no reliable decoding.</span></li>
+          <li><span class="zh"><strong>beta（14–30 Hz）</strong>：位置<em>可以</em>解码，但表现不如 alpha；而且 beta 的解码误差<strong>不与</strong>行为记忆误差相关，其解码不确定性也<strong>不与</strong>报告不确定性相关（<span class="ref">Figure S3A–C</span>）。</span><span class="en"><strong>Beta (14–30 Hz)</strong>: location <em>is</em> decodable, but worse than alpha; and beta's decoding error did <strong>not</strong> correlate with behavioural memory error, nor did its decoded uncertainty correlate with reported uncertainty (<span class="ref">Figure S3A–C</span>).</span></li>
+          <li><span class="zh"><strong>改用实部 + 虚部做特征</strong>：虽然输入特征数翻倍，但<strong>所有频段都掉到机会水平</strong>（<span class="ref">Figure S3D</span>）。作者的解释是：目标位置主要表征在振荡的<em>功率</em>里，而线性贝叶斯解码器无法自然恢复"实部虚部 → 功率"这个非线性变换。</span><span class="en"><strong>Using real + imaginary components as features</strong>: despite doubling the feature count, <strong>every band fell to chance</strong> (<span class="ref">Figure S3D</span>). The authors' reading: location is represented mainly in oscillatory <em>power</em>, and a linear Bayesian decoder cannot recover the nonlinear mapping from real/imaginary components to power.</span></li>
+        </ul>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="v a">80.5°</div><div class="k"><span class="zh">平均绝对解码误差（机会水平 90°）</span><span class="en">mean absolute decoding error (chance = 90°)</span></div><div class="sub">t(13) = 6.42, p &lt; .001</div></div>
+        <div class="stat"><div class="v a">12 / 14</div><div class="k"><span class="zh">解码误差在 0° 附近聚集的被试数</span><span class="en">participants with errors clustered near 0°</span></div><div class="sub">Fig 2B, S1</div></div>
+        <div class="stat"><div class="v a">p = 0.04</div><div class="k"><span class="zh">解码不确定性 ↔ 报告不确定性</span><span class="en">decoded ↔ reported uncertainty</span></div><div class="sub">t(13) = 2.32 · perm p = .002</div></div>
+        <div class="stat"><div class="v a">p = 0.008</div><div class="k"><span class="zh">解码不确定性 ↔ 绝对解码误差</span><span class="en">decoded uncertainty ↔ absolute decoding error</span></div><div class="sub">t(13) = 3.16</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 结果二 ===================== -->
+    <section id="r2">
+      <div class="chapter-head">
+        <div class="chapter-num">06</div>
+        <h2><span class="zh">结果二：beta 承载标量信心信号</span><span class="en">Result 2: beta carries a scalar confidence signal</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这一章对应 <span class="ref">Figure 3</span>。如果说 alpha 的发现回答了"记忆本身长什么样"，beta 的发现回答的是另一个问题：大脑有没有<strong>另外</strong>维护一个不含具体内容的、纯粹表示"我多有把握"的量？</span>
+          <span class="en">This chapter covers <span class="ref">Figure 3</span>. If the alpha finding describes what the memory itself looks like, the beta finding asks a different question: does the brain maintain a <strong>separate</strong> quantity carrying no item content, purely expressing how sure it is?</span>
+        </p>
+
+        <h3><span class="zh">分析方法换了：从"解码"换成"直接预测"</span><span class="en">A different analysis: from decoding to direct prediction</span></h3>
+        <p>
+          <span class="zh">这里作者换了工具。前面用贝叶斯解码是因为要拿到"记忆内容 + 后验宽度"；这一章要问的是"脑电能不能直接说出报告的数值"，所以改用 <strong>ridge 回归</strong>：把每个频段的功率谱当作自变量，把报告的弧长当作因变量，直接拟合。</span>
+          <span class="en">The tool changes here. Bayesian decoding was needed to get "content + posterior width"; this chapter asks whether EEG can directly state the reported value, so it switches to <strong>ridge regression</strong>: band-limited power as predictors, reported arc length as the dependent variable.</span>
+        </p>
+        <p>
+          <span class="zh">结果只有 beta 频段站得住：</span>
+          <span class="en">Only the beta band holds up:</span>
+        </p>
+        <p class="mono" style="font-size:14px;color:var(--beta-deep);font-weight:600">t(13) = 2.92, p = 0.012　·　置换检验 p = 0.002</p>
+        <p>
+          <span class="zh">其他频段全部停留在机会水平。注意与第 05 章的呼应：<strong>alpha 能解码内容但预测不了报告的<em>数值</em>，beta 预测得了数值但（如前所述）解码内容表现不佳且不与报告相关</strong>。两条线是干净的<em>双重分离</em>（double dissociation），这是本文最有力的证据结构。</span>
+          <span class="en">Every other band sat at chance. Note the symmetry with chapter 05: <strong>alpha decodes content but cannot predict the report's <em>value</em>; beta predicts the value but (as shown earlier) decodes content poorly and does not correlate with reports</strong>. The two lines form a clean <em>double dissociation</em> — the paper's strongest evidential structure.</span>
+        </p>
+
+        <h3><span class="zh">最反直觉的一条：beta 不只在"当下"</span><span class="en">The most counter-intuitive part: beta is not only about <em>now</em></span></h3>
+        <p>
+          <span class="zh">行为数据先给了一个线索：不确定性报告存在<strong>序列依赖</strong>——当前试次报告的弧长与上一试次显著相关（<span class="ref">Fig 3C</span>）。也就是说，人的信心不是每试次独立重新计算的，它带着"上一把的手感"。</span>
+          <span class="en">A behavioural clue comes first: uncertainty reports show <strong>serial dependence</strong> — this trial's arc length correlates with the previous trial's (<span class="ref">Fig 3C</span>). Confidence is not recomputed independently each trial; it carries over.</span>
+        </p>
+        <p>
+          <span class="zh">接下来是全文最漂亮的一个分析，也是最能说明 beta 性质的一个：作者把<strong>上一试次的弧长</strong>当作因变量，用<strong>当前试次的 beta 活动</strong>去"预测"它（<span class="ref">Fig 3D</span>）。结果是显著的。这在逻辑上很关键——当前试次的脑电不可能由上一试次的行为造成，所以这个结果只能理解为：<strong>beta 活动反映的是一个跨越试次的、持续存在的内部状态</strong>，而不是对本试次刺激或反应的即时编码。</span>
+          <span class="en">Then comes the paper's most elegant analysis, and the one that best characterises beta: the authors take the <em>previous</em> trial's arc length as the dependent variable and "predict" it from the <em>current</em> trial's beta activity (<span class="ref">Fig 3D</span>). It works. Logically this matters — current-trial EEG cannot be caused by previous-trial behaviour, so the only reading is that <strong>beta reflects a persistent internal state spanning trials</strong>, not an online encoding of this trial's stimulus or response.</span>
+        </p>
+
+        <div class="callout read">
+          <div class="ct"><span class="zh">读原文时注意</span><span class="en">When reading the original</span></div>
+          <p><span class="zh">原文对 Figure 3D 只写了"can reliably 'predict'"，<strong>没有给出 t 值和 p 值</strong>。作者在 predict 上加了引号，是在提示这是统计意义上的预测而非因果。读的时候不必去找一个不存在的数字。相比之下，Figure 3A/3B 的 beta 效应给出了完整的 <span class="mono">t(13) = 2.92, p = 0.012</span>。</span><span class="en">The original says only that beta "can reliably 'predict'" the previous trial's uncertainty for Figure 3D — <strong>no t or p value is reported</strong>. The scare quotes around "predict" flag that this is statistical, not causal. Don't hunt for a number that isn't there. By contrast, the beta effect in Figure 3A/3B does carry the full <span class="mono">t(13) = 2.92, p = 0.012</span>.</span></p>
+        </div>
+
+        <h3><span class="zh">两条主线的证据结构</span><span class="en">The evidential structure of the two lines</span></h3>
+        <p>
+          <span class="zh">下面这张表把全文的关键统计量放在一起，可以直观看出"双分离"的形状：alpha 在内容相关分析上强、在数值预测上弱；beta 恰好反过来。</span>
+          <span class="en">The table below gathers the paper's key statistics so the double dissociation is visible at a glance: alpha is strong on content-related analyses and weak on value prediction; beta is the mirror image.</span>
+        </p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="zh">分析</span><span class="en">Analysis</span></th>
+              <th><span class="zh">频段</span><span class="en">Band</span></th>
+              <th><span class="zh">统计量</span><span class="en">Statistic</span></th>
+              <th><span class="zh">结果</span><span class="en">Outcome</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="zh">解码绝对误差 vs 机会水平 (90°)</span><span class="en">Absolute decoding error vs chance (90°)</span></td><td><span class="tag-alpha">alpha</span></td><td class="num">t(13) = 6.42<br>p &lt; .001</td><td><span class="zh">显著</span><span class="en">Significant</span></td></tr>
+            <tr><td><span class="zh">解码误差 ↔ 行为记忆误差</span><span class="en">Decoding error ↔ memory error</span></td><td><span class="tag-alpha">alpha</span></td><td class="num"><span class="zh">显著（原文未给 t）</span><span class="en">sig., no t reported</span></td><td><span class="zh">显著</span><span class="en">Significant</span></td></tr>
+            <tr><td><span class="zh">解码不确定性 ↔ 报告不确定性</span><span class="en">Decoded ↔ reported uncertainty</span></td><td><span class="tag-alpha">alpha</span></td><td class="num">t(13) = 2.32<br>p = .04</td><td><span class="zh">显著</span><span class="en">Significant</span></td></tr>
+            <tr><td><span class="zh">解码不确定性 ↔ 绝对解码误差</span><span class="en">Decoded uncertainty ↔ abs. decoding error</span></td><td><span class="tag-alpha">alpha</span></td><td class="num">t(13) = 3.16<br>p = .008</td><td><span class="zh">显著</span><span class="en">Significant</span></td></tr>
+            <tr><td><span class="zh">Ridge 预测报告不确定性</span><span class="en">Ridge prediction of reported uncertainty</span></td><td><span class="tag-alpha">alpha</span></td><td class="num">—</td><td><span class="zh">机会水平</span><span class="en">Chance</span></td></tr>
+            <tr><td><span class="zh">Ridge 预测报告不确定性</span><span class="en">Ridge prediction of reported uncertainty</span></td><td><span class="tag-beta">beta</span></td><td class="num">t(13) = 2.92<br>p = .012</td><td><span class="zh">显著</span><span class="en">Significant</span></td></tr>
+            <tr><td><span class="zh">解码不确定性 ↔ 报告不确定性</span><span class="en">Decoded ↔ reported uncertainty</span></td><td><span class="tag-beta">beta</span></td><td class="num">—</td><td><span class="zh">不显著</span><span class="en">n.s.</span></td></tr>
+            <tr><td><span class="zh">解码误差 ↔ 行为记忆误差</span><span class="en">Decoding error ↔ memory error</span></td><td><span class="tag-beta">beta</span></td><td class="num">—</td><td><span class="zh">不显著</span><span class="en">n.s.</span></td></tr>
+            <tr><td><span class="zh">位置解码（内容）</span><span class="en">Location decoding (content)</span></td><td><span class="tag-beta">beta</span></td><td class="num">—</td><td><span class="zh">可解码但逊于 alpha</span><span class="en">Decodable, worse than alpha</span></td></tr>
+            <tr><td><span class="zh">任何分析</span><span class="en">Any analysis</span></td><td><span class="mono" style="font-size:12px">theta</span></td><td class="num">—</td><td><span class="zh">无可靠解码</span><span class="en">No reliable decoding</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure>
+        <div class="legend">
+          <span><i class="a"></i><span class="zh">与 alpha 频段相关</span><span class="en">Involves the alpha band</span></span>
+          <span><i class="b"></i><span class="zh">与 beta 频段相关</span><span class="en">Involves the beta band</span></span>
+          <span><i class="thr"></i><span class="zh">p = .05 临界值</span><span class="en">p = .05 critical value</span></span>
+        </div>
+        <div class="figure-scroll">
+          <svg viewBox="0 0 720 300" role="img" aria-label="五个关键效应的 t 值条形图，全部高于 df=13 双尾 p=.05 的临界值 2.16" class="wide">
+            <!-- 临界值线 t=2.16 → x = 300 + 2.16*55.7 = 420 -->
+            <line x1="420" y1="26" x2="420" y2="244" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.45"/>
+            <text x="420" y="20" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.65" font-family="'IBM Plex Mono',monospace">2.16</text>
+
+            <!-- 基线 -->
+            <line x1="300" y1="26" x2="300" y2="244" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>
+            <text x="300" y="262" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.6" font-family="'IBM Plex Mono',monospace">0</text>
+            <line x1="411" y1="244" x2="411" y2="250" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+            <text x="411" y="262" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.6" font-family="'IBM Plex Mono',monospace">2</text>
+            <line x1="523" y1="244" x2="523" y2="250" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+            <text x="523" y="262" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.6" font-family="'IBM Plex Mono',monospace">4</text>
+            <line x1="634" y1="244" x2="634" y2="250" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+            <text x="634" y="262" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.6" font-family="'IBM Plex Mono',monospace">6</text>
+            <text x="694" y="262" font-size="11" text-anchor="end" fill="currentColor" opacity="0.5" font-family="'IBM Plex Mono',monospace">t 值</text>
+
+            <!-- 条形 -->
+            <!-- 1: alpha 解码精度 t=6.42 → x2=657.6 ; y=40 -->
+            <text x="290" y="46" font-size="12" text-anchor="end" fill="currentColor">alpha 解码精度 vs 机会</text>
+            <rect x="300" y="34" width="357.6" height="20" rx="4" fill="var(--alpha)"/>
+            <text x="665" y="49" font-size="11.5" fill="currentColor" opacity="0.8" font-family="'IBM Plex Mono',monospace">6.42</text>
+
+            <!-- 2: beta 位置报告期 t=3.75 → 508.9 ; y=84 -->
+            <text x="290" y="90" font-size="12" text-anchor="end" fill="currentColor">beta 预测不确定性（位置报告期）</text>
+            <rect x="300" y="78" width="208.9" height="20" rx="4" fill="var(--beta)"/>
+            <text x="516" y="93" font-size="11.5" fill="currentColor" opacity="0.8" font-family="'IBM Plex Mono',monospace">3.75</text>
+
+            <!-- 3: alpha 解码不确定性 vs 解码误差 t=3.16 → 476.0 ; y=128 -->
+            <text x="290" y="134" font-size="12" text-anchor="end" fill="currentColor">alpha 解码不确定性 ↔ 解码误差</text>
+            <rect x="300" y="122" width="176.0" height="20" rx="4" fill="var(--alpha)"/>
+            <text x="483" y="137" font-size="11.5" fill="currentColor" opacity="0.8" font-family="'IBM Plex Mono',monospace">3.16</text>
+
+            <!-- 4: beta ridge t=2.92 → 462.6 ; y=172 -->
+            <text x="290" y="178" font-size="12" text-anchor="end" fill="currentColor">beta 预测不确定性（延迟期）</text>
+            <rect x="300" y="166" width="162.6" height="20" rx="4" fill="var(--beta)"/>
+            <text x="470" y="181" font-size="11.5" fill="currentColor" opacity="0.8" font-family="'IBM Plex Mono',monospace">2.92</text>
+
+            <!-- 5: alpha 解码不确定性 vs 报告不确定性 t=2.32 → 429.2 ; y=216 -->
+            <text x="290" y="222" font-size="12" text-anchor="end" fill="currentColor">alpha 解码不确定性 ↔ 报告不确定性</text>
+            <rect x="300" y="210" width="129.2" height="20" rx="4" fill="var(--alpha)"/>
+            <text x="437" y="225" font-size="11.5" fill="currentColor" opacity="0.8" font-family="'IBM Plex Mono',monospace">2.32</text>
+
+            <text x="290" y="286" font-size="11.5" text-anchor="end" fill="currentColor" opacity="0.55" font-family="'IBM Plex Mono',monospace">df = 13 · 双尾</text>
+          </svg>
+        </div>
+        <figcaption>
+          <span class="figlabel"><span class="zh">图 4</span><span class="en">Fig 4</span></span>
+          <span class="zh">原文报告的全部组水平 t 值（针对零的单样本 t 检验，df = 13）。虚线是双尾 p = .05 的临界值 2.16。五个效应全部越过临界值，但跨越幅度差别很大——最高与最低相差近三倍。</span>
+          <span class="en">Every group-level t value the paper reports (one-sample t against zero, df = 13). The dashed line is the two-tailed p = .05 critical value, 2.16. All five clear it, but by very different margins — the largest is nearly three times the smallest.</span>
+          <span class="note"><span class="zh">数据来源：原文 Results 正文与图注。</span><span class="en">Source: the reported statistics in the Results text.</span></span>
+        </figcaption>
+        <details style="margin-top:14px;border:0;border-radius:0;background:transparent">
+          <summary style="padding:6px 0;font-size:13px;color:var(--ink-2)"><span class="zh">查看数据表</span><span class="en">View as a table</span></summary>
+          <div class="tablewrap" style="margin-top:10px">
+            <table>
+              <thead><tr><th><span class="zh">效应</span><span class="en">Effect</span></th><th>t</th><th>p</th></tr></thead>
+              <tbody>
+                <tr><td><span class="zh">alpha 解码精度 vs 机会水平</span><span class="en">alpha decoding accuracy vs chance</span></td><td class="num">6.42</td><td class="num">&lt; .001</td></tr>
+                <tr><td><span class="zh">beta 预测不确定性（位置报告期）</span><span class="en">beta predicts uncertainty (location-report period)</span></td><td class="num">3.75</td><td class="num">.002</td></tr>
+                <tr><td><span class="zh">alpha 解码不确定性 ↔ 解码误差</span><span class="en">alpha decoded uncertainty ↔ decoding error</span></td><td class="num">3.16</td><td class="num">.008</td></tr>
+                <tr><td><span class="zh">beta 预测不确定性（延迟期）</span><span class="en">beta predicts uncertainty (delay period)</span></td><td class="num">2.92</td><td class="num">.012</td></tr>
+                <tr><td><span class="zh">alpha 解码不确定性 ↔ 报告不确定性</span><span class="en">alpha decoded uncertainty ↔ reported uncertainty</span></td><td class="num">2.32</td><td class="num">.04</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </figure>
+    </section>
+
+    <!-- ===================== 结果三 ===================== -->
+    <section id="r3">
+      <div class="chapter-head">
+        <div class="chapter-num">07</div>
+        <h2><span class="zh">结果三：时间进程与皮层来源的分化</span><span class="en">Result 3: time courses and cortical origins diverge</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">前面证明了"两个信号存在"。这一章（对应 <span class="ref">Figure 4</span>、<span class="ref">S4</span>、<span class="ref">S5</span>）回答"它们像不像同一个东西的两种说法"——答案是不像，而且差别很大。</span>
+          <span class="en">The previous chapters established that two signals exist. This one (<span class="ref">Figure 4</span>, <span class="ref">S4</span>, <span class="ref">S5</span>) asks whether they are two descriptions of one thing. They are not, and the differences are large.</span>
+        </p>
+
+        <h3><span class="zh">时间进程：一个"晚"，一个"全天候"</span><span class="en">Time course: one is late, one is always on</span></h3>
+        <p>
+          <span class="zh">作者做了逐时间点的分析（−1 s 到 2.5 s，相对刺激起始），然后对"这个时间点的相关性是否显著"做聚类置换校正。结果形成鲜明对比：</span>
+          <span class="en">The authors ran a time-resolved analysis (−1 s to 2.5 s relative to stimulus onset) and applied cluster-based permutation correction to "is the correlation at this time point significant". The contrast is sharp:</span>
+        </p>
+        <ul>
+          <li><span class="zh"><span class="tag-alpha">alpha</span> 解码出的不确定性在刺激出现后迅速下降（说明信息进来了），整个延迟期都保持可解码；但<strong>"解码不确定性 ↔ 报告不确定性"这条相关只在延迟期<em>中后段的一个较短窗口</em>才显著</strong>（<span class="ref">Fig 4A, 4B</span>）。</span><span class="en"><span class="tag-alpha">alpha</span> Decoded uncertainty drops quickly after stimulus onset (information arrived) and stays decodable throughout the delay; but the <strong>decoded-uncertainty ↔ reported-uncertainty correlation emerges only in <em>a short, relatively late window</em> in the middle of the delay</strong> (<span class="ref">Fig 4A, 4B</span>).</span></li>
+          <li><span class="zh"><span class="tag-beta">beta</span> 的 ridge 预测<strong>在整个试次都高于机会水平，甚至<em>在刺激出现之前</em></strong>（<span class="ref">Fig 4D</span>）。这是判断 beta 是"持续状态"而非"反应"的决定性证据。</span><span class="en"><span class="tag-beta">beta</span> Ridge prediction is <strong>above chance across the whole trial — even <em>before stimulus onset</em></strong> (<span class="ref">Fig 4D</span>). This is the decisive evidence that beta is a persistent state rather than a response.</span></li>
+        </ul>
+
+        <figure>
+          <div class="legend">
+            <span><i class="a"></i><span class="zh">alpha：解码不确定性 ↔ 报告</span><span class="en">alpha: decoded uncertainty ↔ report</span></span>
+            <span><i class="b"></i><span class="zh">beta：预测不确定性 ↔ 报告</span><span class="en">beta: predicted uncertainty ↔ report</span></span>
+          </div>
+          <div class="figure-scroll">
+            <svg viewBox="0 0 720 268" role="img" aria-label="示意图：alpha 的相关只在延迟中后段一个短窗口显著，beta 的预测在整个试次包括刺激前都高于机会水平" class="wide">
+              <!-- 时间轴: -1s..2.5s 映射到 x 60..660 (600px / 3.5s = 171.43 px/s) -->
+              <!-- t=0 → x=60+171.43=231.4 ; t=0.5 → 317.1 ; t=2.5 → 660 -->
+
+              <!-- 背景区段 -->
+              <rect x="231" y="30" width="86" height="140" fill="var(--beta-soft)" opacity="0.7"/>
+              <rect x="317" y="30" width="343" height="140" fill="var(--surface-2)"/>
+
+              <text x="274" y="24" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.7" font-family="'IBM Plex Mono',monospace">刺激 0.5s</text>
+              <text x="488" y="24" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.7" font-family="'IBM Plex Mono',monospace">延迟 2 s</text>
+
+              <!-- 基线 -->
+              <line x1="60" y1="170" x2="680" y2="170" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>
+              <g font-family="'IBM Plex Mono',monospace" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.6">
+                <text x="60" y="188">−1</text>
+                <text x="231" y="188">0</text>
+                <text x="403" y="188">1</text>
+                <text x="574" y="188">2</text>
+                <text x="680" y="188">2.5</text>
+              </g>
+              <text x="680" y="206" font-size="11" text-anchor="end" fill="currentColor" opacity="0.55" font-family="'IBM Plex Mono',monospace">秒（相对刺激起始）</text>
+              <line x1="231" y1="170" x2="231" y2="176" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+              <line x1="403" y1="170" x2="403" y2="176" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+              <line x1="574" y1="170" x2="574" y2="176" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+              <!-- beta 带：全程 (60..660) 在 y=64 -->
+              <rect x="60" y="56" width="600" height="18" rx="3" fill="var(--beta)" opacity="0.85"/>
+              <text x="66" y="70" font-size="11.5" fill="#fff" font-family="'IBM Plex Mono',monospace" font-weight="600">beta：全程高于机会水平</text>
+              <text x="666" y="70" font-size="11" text-anchor="end" fill="var(--beta)" font-weight="600">↑</text>
+
+              <!-- alpha 带：仅延迟中后段一小段 -->
+              <rect x="60" y="104" width="600" height="18" rx="3" fill="var(--surface-3)"/>
+              <rect x="420" y="104" width="90" height="18" rx="3" fill="var(--alpha)"/>
+              <text x="66" y="118" font-size="11.5" fill="currentColor" opacity="0.75" font-family="'IBM Plex Mono',monospace">alpha：延迟期可解码</text>
+
+              <!-- 标注 -->
+              <line x1="465" y1="122" x2="465" y2="150" stroke="var(--alpha)" stroke-width="1.2"/>
+              <text x="465" y="163" font-size="11" text-anchor="middle" fill="var(--alpha)" font-family="'IBM Plex Mono',monospace" font-weight="600">相关性显著窗</text>
+
+              <text x="60" y="232" font-size="12" fill="currentColor" opacity="0.8">beta 在刺激出现前就已高于机会水平 → 它不是对刺激的反应，而是持续的内部状态</text>
+              <text x="60" y="254" font-size="12" fill="currentColor" opacity="0.8">alpha 的相关出现得晚且短 → 更可能反映维持过程中逐渐累积的变异性</text>
+            </svg>
+          </div>
+          <figcaption>
+            <span class="figlabel"><span class="zh">图 5</span><span class="en">Fig 5</span></span>
+            <span class="zh">两条时间线的对比。<strong>注意这是示意图</strong>——依据原文 Figure 4B 与 4D 的文字描述重绘，纵向高度和显著窗的精确边界不代表原始数值。要看真实的逐点曲线与聚类范围，请查原文。</span>
+            <span class="en">The two time courses side by side. <strong>This is a schematic</strong> — redrawn from the descriptions of Figure 4B and 4D, so vertical heights and the exact bounds of the significant window do not represent the original values. For the real point-by-point curves and cluster extents, see the paper.</span>
+          </figcaption>
+        </figure>
+
+        <p>
+          <span class="zh">另一个值得注意的对照：当同样的贝叶斯解码器被用在<strong>时域电压</strong>（而不是 alpha 功率）上时，位置只在<strong>刺激呈现期</strong>可解码，一到延迟期就掉到机会水平（<span class="ref">Figure S4B</span>）。这说明 alpha <em>功率</em>携带的是刺激消失之后仍然持续的记忆信息，而时域诱发电位只反映当下的感觉输入。</span>
+          <span class="en">One more telling contrast: when the same Bayesian decoder was applied to the <strong>time-domain voltage</strong> rather than alpha power, location was decodable only during <strong>stimulus presentation</strong> and fell to chance as soon as the delay began (<span class="ref">Figure S4B</span>). Alpha <em>power</em> carries mnemonic information that persists after the stimulus is gone; the time-domain evoked response only reflects the sensory input of the moment.</span>
+        </p>
+
+        <h3><span class="zh">皮层来源：两个信号来自不同地方</span><span class="en">Cortical origins: the two signals come from different places</span></h3>
+        <p>
+          <span class="zh">用 sLORETA 把头皮信号投影回皮层，然后在每个皮层顶点上做逐试次相关：</span>
+          <span class="en">sLORETA projects the scalp signal back onto the cortex, then a trial-wise correlation is computed at every cortical vertex:</span>
+        </p>
+        <ul>
+          <li><span class="zh"><span class="tag-alpha">alpha</span> 功率与<strong>目标位置</strong>相关的区域：左侧<strong>顶枕沟</strong>（parieto-occipital sulcus）的一个团簇，与 <strong>V3AB 和 IPS0</strong> 大致重叠——这正是作者此前用 fMRI 做同类任务时，发现位置解码最强、解码不确定性与行为不确定性关系最强的区域（Li 等 2021, 2025, 2026）。</span><span class="en"><span class="tag-alpha">alpha</span> Power correlated with <strong>target location</strong> in a cluster on the left <strong>parieto-occipital sulcus</strong>, broadly overlapping <strong>V3AB and IPS0</strong> — the same regions where the authors' earlier fMRI work with a similar task found the strongest location decoding and the strongest link between decoded and reported uncertainty (Li et al. 2021, 2025, 2026).</span></li>
+          <li><span class="zh"><span class="tag-beta">beta</span> 功率与<strong>报告弧长</strong>相关的区域：中央前沟、中央后沟，以及楔前叶、中央旁小叶和前额叶的若干内侧团簇（<span class="ref">Fig 4E</span>）。</span><span class="en"><span class="tag-beta">beta</span> Power correlated with <strong>reported arc length</strong> at the precentral and postcentral sulci, plus medial clusters around the precuneus, paracentral lobule and prefrontal cortex (<span class="ref">Fig 4E</span>).</span></li>
+          <li><span class="zh"><strong>对 alpha 做了同样的分析，但没有任何皮层源与报告弧长相关</strong>。这条阴性结果很重要——它说明两条线的分离不只是"哪个频段在哪段时间有信号"，而是空间上也分开了。</span><span class="en"><strong>The same analysis on alpha found no cortical source correlating with reported arc length at all.</strong> This null matters: the two lines are separated not only in time and band but in space.</span></li>
+        </ul>
+
+        <div class="callout warn">
+          <div class="ct"><span class="zh">为什么 beta 的定位会引出麻烦</span><span class="en">Why beta's localisation creates a problem</span></div>
+          <p><span class="zh">中央前/后沟是<strong>感觉运动皮层</strong>。而被试报告弧长需要按键。这就产生了一个煞有介事的替代解释：beta 反映的可能只是"我要按多少次键"的<em>运动准备活动</em>，而不是任何与信心有关的东西。这不是吹毛求疵——它足以推翻整篇文章的第二条主线。作者为此做了四项控制分析，见下一章。</span><span class="en">The pre/postcentral sulcus is <strong>sensorimotor cortex</strong>, and reporting arc length requires key presses. That yields a serious alternative explanation: beta might reflect nothing more than <em>motor preparation</em> for the key presses, with no relation to confidence at all. This is not nitpicking — it would sink the paper's second main claim. The authors ran four control analyses, in the next chapter.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 控制分析 ===================== -->
+    <section id="controls">
+      <div class="chapter-head">
+        <div class="chapter-num">08</div>
+        <h2><span class="zh">控制分析：证明不是肌肉在说话</span><span class="en">Controls: showing it isn't the muscles talking</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">这一章对应 <span class="ref">Figure S5</span>，是全文<strong>方法论上最值得学习</strong>的部分。作者没有回避"beta 可能是运动信号"这个质疑，而是设计了一组互相独立的检验来逐一排除。读原文时如果跳过补充材料，你会错过这篇文章最扎实的一段论证。</span>
+          <span class="en">This chapter covers <span class="ref">Figure S5</span> and is the paper's <strong>most instructive methodological passage</strong>. Rather than dodging the "beta might be motor" objection, the authors designed a set of independent checks against it. Skip the supplemental material and you miss the most solid stretch of reasoning in the paper.</span>
+        </p>
+
+        <h3><span class="zh">四项控制，各堵一个漏洞</span><span class="en">Four controls, each plugging one hole</span></h3>
+
+        <ul>
+          <li>
+            <span class="zh"><strong>控制一：把初始弧长随机化。</strong>如果弧线总是从固定长度起步，那么"报告值"就和"按键次数"高度绑定。作者把初始弧长设为 0°–20° 均匀随机（<span class="ref">Figure S5A</span> 显示这个范围很好地覆盖了实际报告值的分布），从而<strong>削弱了报告值与运动需求之间的确定性耦合</strong>。</span>
+            <span class="en"><strong>Control 1: randomise the starting arc.</strong> If the arc always began at a fixed length, the reported value would be tightly bound to the number of key presses. The initial length was uniformly random over 0°–20° (<span class="ref">Figure S5A</span> shows this range covers the observed distribution of reports well), which <strong>decouples the reported value from the motor demands</strong>.</span>
+          </li>
+          <li>
+            <span class="zh"><strong>控制二：看调整时间。</strong>如果 beta 反映运动量，那它应该和"花了多久调整弧线"有关。结果没有相关：<span class="mono">平均 r = −0.018, p = 0.63</span>。</span>
+            <span class="en"><strong>Control 2: check adjustment time.</strong> If beta reflected motor effort, it should relate to how long the arc took to adjust. It did not: <span class="mono">mean r = −0.018, p = 0.63</span>.</span>
+          </li>
+          <li>
+            <span class="zh"><strong>控制三：换一种运动来报告。</strong>这是最巧妙的一项。在"位置报告期"，被试是用<strong>鼠标点击</strong>来报告位置的——一个与"按键调弧长"完全不同的动作。如果 beta 只是按键相关，它在这个阶段就不该有预测力。结果 beta 在这个阶段<strong>依然能预测不确定性</strong>：<span class="mono">t(13) = 3.75, p = 0.002</span>（<span class="ref">Figure S5B</span>）。实际上这是全文<em>第二强</em>的效应。</span>
+            <span class="en"><strong>Control 3: use a different movement.</strong> The cleverest one. During the location-report period participants reported with a <strong>mouse click</strong> — a movement entirely different from the key presses used to adjust the arc. If beta were merely key-press-related it should have no predictive power here. It did: <span class="mono">t(13) = 3.75, p = 0.002</span> (<span class="ref">Figure S5B</span>) — in fact the <em>second strongest</em> effect in the paper.</span>
+          </li>
+          <li>
+            <span class="zh"><strong>控制四：眼动。</strong>用注视位置、注视速度、瞳孔大小这五个眼动特征去预测报告的不确定性。结果预测力<strong>很弱且在所有检验的时间点都不显著</strong>，远不如 beta 频段（<span class="ref">Figure S5C</span>）。</span>
+            <span class="en"><strong>Control 4: eye movements.</strong> Five eye features — gaze position, gaze velocity, pupil size — were used to predict reported uncertainty. Predictive power was <strong>weak and non-significant at every time point tested</strong>, far below the beta band (<span class="ref">Figure S5C</span>).</span>
+          </li>
+        </ul>
+
+        <p>
+          <span class="zh">作者的结论措辞很克制：这些结果"反对 beta 活动<em>仅仅</em>由不确定性报告相关的运动反应驱动的解释"，转而支持它反映"一个与主观不确定性或信心耦合的决策相关内部状态"。注意 "solely"（仅仅）这个词——他们承认运动成分可能存在，只是不是全部。</span>
+          <span class="en">The authors' conclusion is carefully worded: these results "argue against the interpretation that the beta-band activity is <em>solely</em> driven by the motor responses related to uncertainty reports", and instead support "a decision-related internal state coupled with subjective uncertainty or confidence". Note the word "solely" — they concede a motor component may exist, just not the whole story.</span>
+        </p>
+
+        <div class="callout info">
+          <div class="ct"><span class="zh">这一章教你的通用技能</span><span class="en">The transferable skill here</span></div>
+          <p><span class="zh">任何"脑信号 ↔ 行为报告"的研究都要面对这个问题：报告本身是一个动作，动作会在脑电里留下痕迹。作者的应对方式是<strong>换一种动作去做同一件事</strong>（控制三）——这是排除运动混淆最有力的设计，比单纯统计控制有效得多。你在读其他 EEG/fMRI 论文、或者设计自己的实验时，可以直接借用这个思路。</span><span class="en">Any study linking a brain signal to a behavioural report faces this: the report <em>is</em> an action, and actions leave traces in EEG. The authors' answer is to <strong>do the same job with a different movement</strong> (control 3) — the strongest available design against a motor confound, far better than statistical control alone. Borrow this when reading other EEG/fMRI work, or when designing your own.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 讨论 ===================== -->
+    <section id="discussion">
+      <div class="chapter-head">
+        <div class="chapter-num">09</div>
+        <h2><span class="zh">讨论：这两个信号意味着什么</span><span class="en">Discussion: what the two signals mean</span></h2>
+      </div>
+
+      <div class="prose">
+        <h3><span class="zh">alpha：抑制性门控，与 fMRI 互补</span><span class="en">Alpha: gating by inhibition, complementary to fMRI</span></h3>
+        <p>
+          <span class="zh">alpha 功率被广泛解释为一种<strong>抑制性调节</strong>，通过改变皮层兴奋性来门控信息流（Jensen &amp; Mazaheri 2010 等）。有一条经典的证据支持这个看法：alpha 功率与 BOLD 信号在刺激编码期呈<strong>负相关</strong>（Hermes 等 2017）。</span>
+          <span class="en">Alpha power is widely read as an <strong>inhibitory modulation</strong> that gates information flow by shifting cortical excitability (Jensen &amp; Mazaheri 2010 and others). A classic piece of supporting evidence: alpha power is <strong>negatively related</strong> to the BOLD response during stimulus encoding (Hermes et al. 2017).</span>
+        </p>
+        <p>
+          <span class="zh">作者由此把本文和此前的 fMRI 工作接成一条链：他们在 <em>Neuron</em> (2021)、<em>Science Advances</em> (2025) 和 <em>PNAS</em> (2026) 的工作显示，视觉与顶叶皮层的 BOLD 活动重建出的工作记忆表征同时预测记忆报告和不确定性。本文表明<strong>同样的概率信息也表达在 alpha 频段里</strong>——这意味着这种"内容与不确定性联合编码"的群体编码方案，跨测量模态（fMRI / EEG）、跨时间尺度（BOLD 的慢变化 / alpha 的毫秒级振荡）都成立。</span>
+          <span class="en">The authors use this to chain the present work to their earlier fMRI studies: work in <em>Neuron</em> (2021), <em>Science Advances</em> (2025) and <em>PNAS</em> (2026) showed that working memory representations reconstructed from BOLD activity in visual and parietal cortex predict both memory reports and uncertainty. This paper shows the <strong>same probabilistic information is also expressed in the alpha band</strong> — meaning this joint content-and-uncertainty population code holds across measurement modalities (fMRI / EEG) and across temporal scales (slow BOLD / millisecond alpha).</span>
+        </p>
+
+        <h3><span class="zh">beta：维持现状，还是也携带内容？</span><span class="en">Beta: maintaining the status quo, or carrying content too?</span></h3>
+        <p>
+          <span class="zh">关于 beta 有两大传统解释，本文试图调和它们：</span>
+          <span class="en">There are two traditional accounts of beta, and the paper tries to reconcile them:</span>
+        </p>
+        <ul>
+          <li><span class="zh"><strong>"维持现状"说</strong>（Engel &amp; Fries 2010）：beta 与稳定当前运动状态、抑制行动计划的改变有关；这一思路被推广到认知领域，认为 beta 支持当前认知状态的稳定或执行自上而下的控制。</span><span class="en"><strong>The "status quo" account</strong> (Engel &amp; Fries 2010): beta stabilises the current motor state and suppresses changes in action plans; extended to cognition, beta is thought to stabilise ongoing cognitive states or serve top-down control.</span></li>
+          <li><span class="zh"><strong>"内容特异"说</strong>（Spitzer &amp; Haegens 2017 等）：beta 也携带关于工作记忆项目的参数化特征信息。</span><span class="en"><strong>The content-specific account</strong> (Spitzer &amp; Haegens 2017 and others): beta also carries parametric feature information about items held in working memory.</span></li>
+        </ul>
+        <p>
+          <span class="zh">作者的调和方式是重新定义"状态"：<em>"这里的'状态'概念并不是一个没有内容的独立模式。就像决策计算模型里许多潜变量一样，这个状态携带一个特定的数值，很像工作记忆中维持的内容（比如物体的颜色或朝向）。在我们这里，被维持的数值就是不确定性的大小本身。"</em> 换句话说，<strong>"状态"和"内容"不是对立的</strong>——一个持续的状态照样可以承载一个具体的量。</span>
+          <span class="en">The reconciliation redefines "state": <em>"the notion of 'state' here is not a distinct mode devoid of content. Rather, like many latent variables in computational models of decision-making, the state carries a specific numerical value, much like the content maintained in working memory (e.g., the color or orientation of an object). In the present case, the maintained value is the magnitude of uncertainty itself."</em> In other words, <strong>"state" and "content" are not opposites</strong> — a persistent state can still carry a specific quantity.</span>
+        </p>
+
+        <h3><span class="zh">与更广文献的接线</span><span class="en">Where it connects to the wider literature</span></h3>
+        <ul>
+          <li><span class="zh"><strong>序列依赖与信心研究一致。</strong>知觉决策中的信心判断也存在历史效应或对自我表现的整体评估（Rouault 等 2019；Rahnev 等 2015 的 "confidence leak"）。</span><span class="en"><strong>Serial dependence matches the confidence literature.</strong> Confidence judgements in perceptual decisions also show history effects and global self-performance estimates (Rouault et al. 2019; Rahnev et al. 2015 on "confidence leak").</span></li>
+          <li><span class="zh"><strong>运动适应任务中的 beta 信心。</strong>感觉运动皮层的 beta 活动可以反映从理想观察者模型估计出的信心水平（Tan 等 2016）；用 TMS 干扰前运动皮层会减少视觉估计任务中的序列依赖（de Azevedo Neto &amp; Bartels 2021），说明这些区域参与把信息从一个试次带到下一个。</span><span class="en"><strong>Beta confidence in motor adaptation.</strong> Sensorimotor beta can index a confidence level estimated from an ideal observer model (Tan et al. 2016); TMS disruption of premotor cortex reduces serial dependence in visual estimation (de Azevedo Neto &amp; Bartels 2021), implicating these areas in carrying information from one trial to the next.</span></li>
+          <li><span class="zh"><strong>跨任务的普遍性。</strong>概率学习研究也报告了 beta 频段的信心信号，<em>甚至在试次前的时段就存在</em>（Meyniel 2020）。提示 beta 可能反映一种更普遍的信心状态，不限于视觉工作记忆。</span><span class="en"><strong>Generality across tasks.</strong> A probability-learning study also reported a beta confidence signal, <em>even during the pre-trial period</em> (Meyniel 2020), hinting that beta may reflect a more general confidence state, not one specific to visual working memory.</span></li>
+          <li><span class="zh"><strong>跨物种。</strong>猕猴背外侧前额叶（DLPFC）的<em>试次前基线活动</em>能预示后续的元认知判断（Ning 等 2026），与本文"信心信号在刺激之前就存在"的发现相互呼应。</span><span class="en"><strong>Across species.</strong> Pre-trial baseline activity in macaque dorsolateral prefrontal cortex (DLPFC) predicts subsequent metacognitive judgements (Ning et al. 2026), echoing this paper's finding that the confidence signal exists before the stimulus.</span></li>
+        </ul>
+
+        <h3><span class="zh">作者自己提出的替代解释</span><span class="en">The alternative explanation the authors raise themselves</span></h3>
+        <p>
+          <span class="zh">这是全文最诚实的一段。作者指出：无论在传统的信心评分任务还是本文的连续报告任务里，被试都必须把<strong>内部证据</strong>通过一套<em>信心标准</em>或<em>映射函数</em>转换成<strong>外显报告</strong>。因此报告的数值不仅反映底层的不确定性估计，也反映这个映射过程。</span>
+          <span class="en">This is the paper's most honest passage. The authors note that in both conventional confidence-rating tasks and their continuous report task, participants must convert <strong>internal evidence</strong> into an <strong>explicit report</strong> through a set of <em>confidence criteria</em> or a <em>mapping function</em>. The reported value therefore reflects not only the underlying uncertainty estimate but also that mapping process.</span>
+        </p>
+        <p>
+          <span class="zh">于是就有了一个<strong>并非互斥</strong>的替代解释：beta 活动反映的可能是这个<em>标准/映射函数</em>的波动，而不（只）是记忆不确定性本身。作者坦承这两种解释<em>"会预期产生高度相似的行为和神经特征，因此难以实证区分"</em>。他们倾向于把 beta 理解为"一个更宽泛的、参与把主观不确定性转化为信心引导行为的内部状态"。</span>
+          <span class="en">Hence an alternative that is <strong>not mutually exclusive</strong>: beta may reflect fluctuations in this <em>criterion or mapping function</em> rather than (only) mnemonic uncertainty itself. The authors concede the two accounts <em>"would be expected to produce highly similar behavioral and neural signatures, making them difficult to distinguish empirically"</em>. They lean toward reading beta as "a broader internal state involved in transforming subjective uncertainty into confidence-guided behavior".</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== 局限 ===================== -->
+    <section id="limits">
+      <div class="chapter-head">
+        <div class="chapter-num">10</div>
+        <h2><span class="zh">局限与批判性思考</span><span class="en">Limitations and critical reading</span></h2>
+      </div>
+
+      <div class="prose">
+        <p class="lede">
+          <span class="zh">一篇好论文的局限往往不在它承认了什么，而在它没说什么。下面分成两部分：作者自己承认的，和你要自己想到的。</span>
+          <span class="en">A good paper's limitations often lie less in what it admits than in what it leaves unsaid. Split into two: what the authors concede, and what you should notice yourself.</span>
+        </p>
+
+        <h3><span class="zh">作者承认的</span><span class="en">What the authors concede</span></h3>
+        <ul>
+          <li><span class="zh"><strong>beta 可能反映映射函数而非不确定性本身</strong>——见上一章，且作者明说难以实证区分。</span><span class="en"><strong>Beta may reflect the mapping function rather than uncertainty itself</strong> — see the previous chapter; the authors say outright that the two are hard to distinguish empirically.</span></li>
+          <li><span class="zh"><strong>行为指标可能累积了从编码到反应的全过程。</strong>作者选 0.5–1.5 s 这个窗口是为了"最小化感觉诱发活动的贡献"，但他们也承认记忆误差和不确定性报告可能反映了从刺激编码一路累积到行为反应的神经过程，而不只是延迟期维持阶段。</span><span class="en"><strong>Behavioural measures may accumulate processes from encoding through response.</strong> The 0.5–1.5 s window was chosen "minimizing contributions from sensory-evoked activity", but the authors concede that memory error and uncertainty reports likely reflect neural processes accumulated from encoding all the way to the response, not just delay-period maintenance.</span></li>
+        </ul>
+
+        <h3><span class="zh">你需要自己注意到的</span><span class="en">What you should notice yourself</span></h3>
+        <ul>
+          <li><span class="zh"><strong>样本量小且是单中心。</strong>14 名被试，全部来自一个实验室的招募。所有推断统计都是组水平的 <span class="mono">t(13)</span>。这个样本量在 EEG 研究里不算异常，但意味着个体差异基本没有被考察——比如是否存在"alpha 派"和"beta 派"的被试。原文只在 <span class="ref">Figure S1</span> 给了个体解码结果。</span><span class="en"><strong>Small, single-site sample.</strong> Fourteen participants from one lab. Every inferential statistic is a group-level <span class="mono">t(13)</span>. That is not unusual for EEG, but it means individual differences went essentially unexamined — for instance, whether some people are "alpha-dominant" and others "beta-dominant". Individual decoding results appear only in <span class="ref">Figure S1</span>.</span></li>
+          <li><span class="zh"><strong>全部是相关证据，没有因果操纵。</strong>没有任何 TMS、损伤或药理干预。文章标题用 "support"（支持）而不是 "cause"（导致），用词是准确的。要确立因果关系，需要有人去干扰 alpha 或 beta 并观察不确定性报告是否改变。</span><span class="en"><strong>All correlational, no causal manipulation.</strong> No TMS, lesion or pharmacological intervention. The title says "support", not "cause", and the wording is accurate. Establishing causation would require perturbing alpha or beta and observing whether uncertainty reports change.</span></li>
+          <li><span class="zh"><strong>EEG 源定位的空间精度有限。</strong>sLORETA 给出的是粗略的皮层分布，不是精确的解剖定位。"与 V3AB 和 IPS0 重叠"是基于模板脑的近似说法，不能当作电极级的证据。</span><span class="en"><strong>Limited spatial precision of EEG source localisation.</strong> sLORETA yields a coarse cortical distribution, not precise anatomy. "Overlapping V3AB and IPS0" is an approximation against a template brain, not electrode-level evidence.</span></li>
+          <li><span class="zh"><strong>任务极简，推广性未知。</strong>只记<em>一个</em>项目、离心率固定 10°、延迟 2 秒。真实情境里往往要同时记住多个项目、时间更长、还有干扰。多项目时资源如何分配、不确定性如何表示，本文没有回答（作者 2025 年的 <em>Science Advances</em> 论文处理了资源分配问题）。</span><span class="en"><strong>The task is minimal; generalisability is unknown.</strong> One item, fixed 10° eccentricity, a 2-second delay. Real situations involve multiple items, longer delays and distraction. How resources and uncertainty work with multiple items is not addressed here (the authors' 2025 <em>Science Advances</em> paper covers resource allocation).</span></li>
+          <li><span class="zh"><strong>不确定性是<em>被要求</em>报告的。</strong>任务强制被试每试次都报告不确定性。日常生活中人并不总是显式评估自己的信心。被强制报告时激活的神经过程，未必等同于自发元认知时的那一套。</span><span class="en"><strong>Uncertainty is <em>demanded</em>.</strong> Participants had to report uncertainty on every trial. In daily life people do not always explicitly assess their confidence. The processes engaged by a forced report may not be the same ones at work in spontaneous metacognition.</span></li>
+        </ul>
+
+        <div class="callout read">
+          <div class="ct"><span class="zh">一个可以追问的问题</span><span class="en">A question worth asking</span></div>
+          <p><span class="zh">如果 beta 携带的是"整体的信心状态"，而 alpha 携带的是"这一次的记忆精度"，那么当两者冲突时——alpha 说你记得很清楚，beta 说你整体没把握——被试最终会报告什么？本文的数据结构其实可以回答这个问题（两个预测因子同时进入一个回归），但原文没有报告这个分析。这是你可以自己想、甚至自己用公开数据（osf.io/t96rn）去做的延伸研究。</span><span class="en">If beta carries a global confidence state and alpha carries this trial's memory precision, what happens when they conflict — alpha says you remember clearly, beta says you feel unsure overall? The dataset could answer this (both predictors in one regression), but the paper does not report that analysis. That is an extension you could think through yourself, or even run on the public data (osf.io/t96rn).</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 术语表 ===================== -->
+    <section id="glossary">
+      <div class="chapter-head">
+        <div class="chapter-num">11</div>
+        <h2><span class="zh">术语表</span><span class="en">Glossary</span></h2>
+      </div>
+      <div class="prose">
+        <p><span class="zh">读原文时卡住的词，多半在这里。中英对照，可直接搜索。</span><span class="en">Most terms that stop you mid-sentence are here. Chinese–English, searchable.</span></p>
+      </div>
+
+      <div class="glossary-tools">
+        <input type="search" id="gsearch" placeholder="搜索术语 / Search terms…" aria-label="搜索术语">
+        <span class="glossary-count" id="gcount"></span>
+      </div>
+
+      <div class="glossary" id="glossary-list">
+        <div class="gterm"><div><div class="gz">工作记忆</div><div class="ge">working memory</div></div><div class="gd">刺激消失后暂时维持信息的能力。本文研究的是空间工作记忆（记住一个位置）。</div></div>
+        <div class="gterm"><div><div class="gz">元认知 / 元记忆</div><div class="ge">metacognition / metamemory</div></div><div class="gd">对自己认知过程（本文中指记忆质量）的评估与监控。</div></div>
+        <div class="gterm"><div><div class="gz">表征精度</div><div class="ge">representational precision</div></div><div class="gd">记忆表征分布的集中程度。分布越窄，精度越高，不确定性越低。</div></div>
+        <div class="gterm"><div><div class="gz">不确定性 / 信心</div><div class="ge">uncertainty / confidence</div></div><div class="gd">一体两面。理论上可区分（Pouget 等 2016），但本文在连续估计任务中不区分二者。</div></div>
+        <div class="gterm"><div><div class="gz">标量信号</div><div class="ge">scalar signal</div></div><div class="gd">只用一个数值表示"总体把握"的信号，不携带关于具体记了什么的信息。本文认为 beta 频段承载这种信号。</div></div>
+        <div class="gterm"><div><div class="gz">概率性群体编码</div><div class="ge">probabilistic population code</div></div><div class="gd">用一大群神经元的整体活动模式来表示一个变量，其活动分布天然对应一个概率分布。</div></div>
+        <div class="gterm"><div><div class="gz">贝叶斯解码</div><div class="ge">Bayesian decoding</div></div><div class="gd">从观测到的神经活动反推刺激的后验分布。本文用的是 TAFKAP 算法。</div></div>
+        <div class="gterm"><div><div class="gz">后验分布</div><div class="ge">posterior distribution</div></div><div class="gd">给定脑电活动后，刺激位置的概率分布。均值 = 解码位置，标准差 = 解码不确定性。</div></div>
+        <div class="gterm"><div><div class="gz">编码模型</div><div class="ge">encoding model</div></div><div class="gd">描述"刺激 → 神经反应"如何映射的生成模型。本文中每个电极的调谐函数由 8 个升余弦基函数线性组合而成。</div></div>
+        <div class="gterm"><div><div class="gz">升余弦基函数</div><div class="ge">raised cosine basis function</div></div><div class="gd">一种局部化的平滑函数，用于把 0–360° 的极角空间分解成若干重叠的基。</div></div>
+        <div class="gterm"><div><div class="gz">调谐曲线</div><div class="ge">tuning curve / tuning function</div></div><div class="gd">单个电极的反应强度随刺激位置变化的曲线。</div></div>
+        <div class="gterm"><div><div class="gz">交叉验证</div><div class="ge">cross-validation</div></div><div class="gd">在部分数据上训练、在未见过的那部分上测试，防止模型"背答案"。本文用留一 run 交叉验证（20 折）。</div></div>
+        <div class="gterm"><div><div class="gz">bagging</div><div class="ge">bagging (bootstrap aggregating)</div></div><div class="gd">对训练数据重复自助抽样、反复解码，把得到的后验分布平均，以获得稳定估计。</div></div>
+        <div class="gterm"><div><div class="gz">岭回归</div><div class="ge">ridge regression</div></div><div class="gd">带 L2 惩罚的线性回归，通过压缩系数幅度来防止过拟合。本文 λ = 10。</div></div>
+        <div class="gterm"><div><div class="gz">功率谱密度</div><div class="ge">power spectral density (PSD)</div></div><div class="gd">信号能量在不同频率上的分布。本文用 Welch 方法（Hann 窗）估计。</div></div>
+        <div class="gterm"><div><div class="gz">短时傅里叶变换</div><div class="ge">short-time Fourier transform (STFT)</div></div><div class="gd">在滑动的时间窗内反复做傅里叶变换，得到时频表示。本文窗长 500 ms，步长 100 ms。</div></div>
+        <div class="gterm"><div><div class="gz">Welch 方法</div><div class="ge">Welch's method</div></div><div class="gd">把信号分段、加窗、各自求谱后再平均，是估计 PSD 的常用稳健方法。</div></div>
+        <div class="gterm"><div><div class="gz">频段</div><div class="ge">frequency band</div></div><div class="gd">本文：theta 2–7 Hz、alpha 8–13 Hz、beta 14–30 Hz。</div></div>
+        <div class="gterm"><div><div class="gz">序列依赖</div><div class="ge">serial dependence</div></div><div class="gd">当前试次的判断受上一试次影响的现象。本文在不确定性报告上观察到。</div></div>
+        <div class="gterm"><div><div class="gz">置换检验</div><div class="ge">permutation test</div></div><div class="gd">通过反复随机重排数据构造零分布，来判断观测效应是否可能出于偶然。本文重复 2,000 次。</div></div>
+        <div class="gterm"><div><div class="gz">聚类置换检验</div><div class="ge">cluster-based permutation test</div></div><div class="gd">在时间或空间序列上做多重比较校正的方法（Maris &amp; Oostenveld 2007）。把相邻的显著点归为团簇，用团簇统计量做置换检验。</div></div>
+        <div class="gterm"><div><div class="gz">sLORETA</div><div class="ge">standardized low-resolution brain electromagnetic tomography</div></div><div class="gd">一种最小范数逆解方法，用于从头皮脑电估计皮层电流密度。</div></div>
+        <div class="gterm"><div><div class="gz">边界元模型</div><div class="ge">boundary element model (BEM)</div></div><div class="gd">描述头部各层组织（头皮、颅骨、脑脊液、脑）导电性的正向模型，用于源定位计算。</div></div>
+        <div class="gterm"><div><div class="gz">独立成分分析</div><div class="ge">independent component analysis (ICA)</div></div><div class="gd">把脑电分解成统计上独立的成分，用于去除眼电、肌电等伪迹。</div></div>
+        <div class="gterm"><div><div class="gz">von Mises 分布</div><div class="ge">von Mises distribution</div></div><div class="gd">圆周上的"正态分布"，用于拟合角度变量的误差分布。本文用它拟合记忆误差与解码误差。</div></div>
+        <div class="gterm"><div><div class="gz">极角 / 离心率</div><div class="ge">polar angle / eccentricity</div></div><div class="gd">极角是圆周上的方位角（0–360°）；离心率是距离注视点的角距离。本文离心率固定 10°，极角是待记忆的变量。</div></div>
+        <div class="gterm"><div><div class="gz">von Mises 分布 / 圆周相关</div><div class="ge">circular correlation (circ_corrcl)</div></div><div class="gd">CircStat 工具箱中用于计算一个角度变量与一个线性变量之间相关的函数。</div></div>
+        <div class="gterm"><div><div class="gz">Fisher z 变换</div><div class="ge">Fisher z-transformation</div></div><div class="gd">把相关系数 r 变换为近似正态的 z 值，以便做组水平的 t 检验。本文所有组水平相关检验都经过这一步。</div></div>
+        <div class="gterm"><div><div class="gz">双重分离</div><div class="ge">double dissociation</div></div><div class="gd">两个系统各自负责不同功能、且互不重叠的证据模式。本文 alpha（内容）与 beta（数值）构成双重分离。</div></div>
+        <div class="gterm"><div><div class="gz">门控即抑制</div><div class="ge">gating by inhibition</div></div><div class="gd">认为 alpha 振荡通过抑制无关信息的加工来调节信息流的理论（Jensen &amp; Mazaheri 2010）。</div></div>
+        <div class="gterm"><div><div class="gz">维持现状</div><div class="ge">status quo (beta)</div></div><div class="gd">认为 beta 振荡负责稳定当前运动或认知状态、抑制改变的理论（Engel &amp; Fries 2010）。</div></div>
+        <div class="gterm"><div><div class="gz">激励相容</div><div class="ge">incentive-compatible</div></div><div class="gd">任务设计使得"如实报告"恰好是收益最大化的策略。本文的弧线赌局即为此设计。</div></div>
+        <div class="gterm"><div><div class="gz">置信区间（报告弧长）</div><div class="ge">confidence interval (arc length)</div></div><div class="gd">本文中被试通过调整弧线长度报告的"记忆可能落在的范围"，即主观不确定性的外显指标。</div></div>
+        <div class="gterm"><div><div class="gz">位置报告期</div><div class="ge">location-report period</div></div><div class="gd">从延迟结束到被试鼠标点击报告位置的这段时间，平均 2.44 秒（跨被试 SD = 0.46 秒）。</div></div>
+        <div class="gterm"><div><div class="gz">试次间间隔</div><div class="ge">inter-trial interval (ITI)</div></div><div class="gd">试次之间的间隔，本文为 2–3 秒，期间注视点为深灰色。</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 自测 ===================== -->
+    <section id="quiz">
+      <div class="chapter-head">
+        <div class="chapter-num">12</div>
+        <h2><span class="zh">自测</span><span class="en">Self-check</span></h2>
+      </div>
+      <div class="prose">
+        <p><span class="zh">先自己答一遍，再展开对照。能答对 6 题以上，读原文正文应该没有障碍。</span><span class="en">Answer first, then open the key. Six or more correct means the paper's main text should read smoothly.</span></p>
+      </div>
+
+      <div class="quiz">
+        <details>
+          <summary><span class="zh">为什么记忆的"准确度"和"精度"不是一回事？本文关心的是哪一个？</span><span class="en">Why are accuracy and precision different, and which does the paper care about?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">准确度是记忆分布的中心离真实值有多远，可以有方向性偏差；精度是分布本身有多集中。可以又准又不精（中心对，但很散），也可以又偏又精（很集中，但系统性偏离）。本文关心<strong>精度</strong>，因为"散得开"正是不确定性的数学含义，而后验分布的宽度就是精度的直接度量。</span><span class="en">Accuracy is how far the centre of the memory distribution is from the truth, and can be directional; precision is how concentrated the distribution is. You can be accurate but imprecise (centred right, very spread) or biased but precise (tight but systematically off). The paper cares about <strong>precision</strong>, because "spread out" is what uncertainty means mathematically, and posterior width measures precision directly.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">为什么被试会"诚实地"报告自己的不确定性？这个设计为什么重要？</span><span class="en">Why would participants honestly report their uncertainty, and why does that design matter?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">因为奖励规则让诚实成为最优解：得分是 <span class="mono">100e<sup>−0.08d</sup></span>，弧越长得分越低，但只有真值落在弧内才得分。画太短会经常得零分，画太长则每题只得很少。期望收益最大化的策略恰好是按真实不确定性来定弧长——这叫激励相容设计。没有这一层，弧长就只是一个任意的数字，无法当作不确定性的有效指标。</span><span class="en">Because the reward rule makes honesty optimal: points are <span class="mono">100e<sup>−0.08d</sup></span>, decreasing in arc length, but nothing is awarded unless the true location falls inside. Too short and you often score zero; too long and you score very little each time. Expected payoff is maximised exactly by setting the arc to your true uncertainty — an incentive-compatible design. Without it, arc length would be an arbitrary number, not a valid index of uncertainty.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">贝叶斯解码器给出两个输出，分别是什么？本文怎么用它们？</span><span class="en">The Bayesian decoder gives two outputs. What are they and how are they used?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">后验分布的<strong>均值</strong>作为"解码出的记忆位置"，<strong>标准差</strong>作为"解码出的不确定性"（神经不确定性指标）。均值用来和行为记忆误差比较（验证解码器确实还原了记忆内容），标准差用来和被试报告的不确定性做相关（验证神经不确定性预测主观不确定性）。</span><span class="en">The posterior <strong>mean</strong> is the decoded memory location; the posterior <strong>standard deviation</strong> is the decoded uncertainty (the neural uncertainty index). The mean is compared with behavioural memory error (verifying the decoder really recovered content); the SD is correlated with reported uncertainty (testing whether neural uncertainty predicts subjective uncertainty).</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">"解码不确定性越大、解码误差也越大"这个结果为什么是好事？</span><span class="en">Why is it good news that larger decoded uncertainty goes with larger decoding error?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">因为一个真正在做概率推断的解码器应该"知道自己什么时候不可靠"。如果它输出的不确定性完全是噪声，就会和它自己的实际误差无关。观察到二者相关（<span class="mono">t(13) = 3.16, p = 0.008</span>），说明这个后验宽度是有意义的概率量，而不只是一个数字。原文称之为"行为良好的概率解码器的标志"。</span><span class="en">Because a decoder genuinely doing probabilistic inference should "know when it is unreliable". If its stated uncertainty were noise, it would bear no relation to its own error. Observing the correlation (<span class="mono">t(13) = 3.16, p = 0.008</span>) shows the posterior width is a meaningful probabilistic quantity, not just a number. The paper calls it "a signature for a well-behaved probabilistic decoder".</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">作者用什么证据说明 beta 不是"对刺激的反应"？</span><span class="en">What evidence shows beta is not a response to the stimulus?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">两条。第一，逐时间点分析显示 beta 的预测力<strong>在刺激出现之前就已经高于机会水平</strong>，并持续整个试次（Figure 4D）——反应不可能早于刺激。第二，用<strong>当前试次的 beta</strong> 去预测<strong>上一试次</strong>的不确定性报告也成立（Figure 3D），这在因果方向上只能是"持续状态"而非"即时反应"。再加上行为上存在序列依赖（Figure 3C），三者互相印证。</span><span class="en">Two. First, the time-resolved analysis shows beta's predictive power is <strong>already above chance before stimulus onset</strong> and persists across the whole trial (Figure 4D) — a response cannot precede its stimulus. Second, <strong>current-trial beta</strong> predicts the <strong>previous trial's</strong> uncertainty report (Figure 3D), which causally can only mean a persistent state rather than an online response. Together with the behavioural serial dependence (Figure 3C), the three converge.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">"beta 只是按键运动"这个质疑为什么危险？作者怎么排除它？</span><span class="en">Why is the "beta is just key presses" objection dangerous, and how is it addressed?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">危险在于 beta 的皮层来源包含中央前/后沟（感觉运动皮层），而报告弧长确实需要按键——如果 beta 只反映运动准备，第二条主线就垮了。四项控制：(1) 初始弧长 0–20° 均匀随机，切断报告值与运动量的确定性耦合；(2) 弧长与调整时间无相关（r = −0.018, p = 0.63）；(3) <strong>换用鼠标点击的位置报告期，beta 依然能预测不确定性（t(13) = 3.75, p = 0.002）</strong>——这是最有力的一项，因为动作类型完全不同；(4) 眼动指标预测力弱且不显著。作者措辞谨慎，只说反对"仅仅"由运动驱动。</span><span class="en">It is dangerous because beta's cortical sources include the pre/postcentral sulcus (sensorimotor cortex) and reporting arc length does require key presses — if beta only reflects motor preparation, the second main claim collapses. Four controls: (1) initial arc uniformly random over 0–20°, breaking the deterministic coupling between reported value and motor demand; (2) no correlation between arc length and adjustment time (r = −0.018, p = 0.63); (3) <strong>during the mouse-click location-report period, beta still predicts uncertainty (t(13) = 3.75, p = 0.002)</strong> — the strongest check, since the movement is entirely different; (4) eye features weak and non-significant. The authors word this carefully, arguing only against <em>solely</em> motor-driven accounts.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">为什么作者说 alpha 和 beta 构成"双重分离"？说出至少三个维度上的分离。</span><span class="en">Why a double dissociation? Name at least three dimensions of separation.</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">分离体现在：(1) <strong>功能</strong>——alpha 解码内容且其精度预测不确定性，beta 预测不确定性的数值但不与内容相关；(2) <strong>时间</strong>——alpha 的相关只在延迟期中后段一个短窗口显著，beta 全程高于机会水平、刺激前就有；(3) <strong>空间</strong>——alpha 与目标位置相关的源在左侧顶枕沟（V3AB/IPS0），beta 与报告弧长相关的源在中央前/后沟及若干内侧区；而且 alpha 没有任何源与报告弧长相关。三个维度上互不重叠，才叫双重分离。</span><span class="en">Separation appears in: (1) <strong>function</strong> — alpha decodes content and its precision predicts uncertainty; beta predicts the uncertainty value but is unrelated to content; (2) <strong>time</strong> — alpha's correlation is significant only in a short mid-to-late delay window, while beta is above chance throughout and before stimulus onset; (3) <strong>space</strong> — alpha's location-related source sits on the left parieto-occipital sulcus (V3AB/IPS0), beta's uncertainty-related sources at the pre/postcentral sulci and medial regions, with no alpha source correlating with reported arc length at all. Non-overlap on all three is what makes it a double dissociation.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">作者提出的"替代解释"是什么？他们为什么说它难以排除？</span><span class="en">What alternative do the authors raise, and why is it hard to rule out?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">替代解释：beta 反映的可能是"信心标准 / 映射函数"的波动，而不是记忆不确定性本身。因为被试必须把内部证据通过一套标准转换成外显的弧长，报告的数值同时包含了不确定性估计和映射过程。作者说这两种解释"会预期产生高度相似的行为和神经特征，因此难以实证区分"——也就是说，即使再补数据，纯相关的方法也分不开。</span><span class="en">The alternative: beta may reflect fluctuations in the confidence <em>criterion / mapping function</em> rather than mnemonic uncertainty itself. Participants must convert internal evidence into an explicit arc length through a criterion, so the reported value contains both the uncertainty estimate and the mapping. The authors say the two accounts "would be expected to produce highly similar behavioral and neural signatures, making them difficult to distinguish empirically" — meaning more correlational data would not separate them.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">本文最根本的方法论局限是什么？如果要你做一个后续实验，你会怎么做？</span><span class="en">What is the deepest methodological limitation, and what follow-up would you run?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">最根本的是<strong>全部为相关证据</strong>，没有因果操纵。所有结论都建立在"神经活动 X 与行为 Y 相关"上，而 X 与 Y 可能同时受第三个变量影响（例如注意波动、唤醒水平）。可行的后续：用<strong>节律性 TMS 或经颅交流电刺激（tACS）</strong>分别扰动 alpha 与 beta 频段，看不确定性报告是否选择性地改变——如果干扰 beta 只影响报告的"整体水平"而不影响逐试次的记忆精度，就能把标量信心信号和表征精度真正分开。另一个方向是用公开数据（osf.io/t96rn）检验 alpha 与 beta 冲突时的报告行为。</span><span class="en">The deepest one is that <strong>all evidence is correlational</strong>, with no causal manipulation. Every conclusion rests on "neural activity X correlates with behaviour Y", and X and Y may both be driven by a third variable such as attentional or arousal fluctuations. A feasible follow-up: use <strong>rhythmic TMS or tACS</strong> to perturb alpha and beta separately and see whether uncertainty reports change selectively — if perturbing beta shifts only the overall level of reports without affecting trial-wise memory precision, the scalar confidence signal and representational precision would be genuinely separated. Another route: use the public data (osf.io/t96rn) to test reporting behaviour when alpha and beta conflict.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="zh">为什么作者把 beta 称为"状态"却又说它"不是没有内容的"？</span><span class="en">Why call beta a "state" yet insist it is "not devoid of content"?</span></summary>
+          <div class="answer">
+            <span class="lbl"><span class="zh">要点</span><span class="en">Key points</span></span>
+            <p><span class="zh">为了调和 beta 研究里的两大传统："维持现状"说（beta 稳定当前状态、抑制改变）和"内容特异"说（beta 也携带工作记忆项目的特征信息）。作者的论点是这两个说法并不冲突：一个持续的状态照样可以承载一个具体的数值。就像决策计算模型里的潜变量，"状态"本身就有取值——只不过本文中这个取值是"不确定性的大小"，而不是物体的颜色或朝向。所以 beta 既是一个跨试次持续的"状态"，又携带了一个有具体数值的"内容"。</span><span class="en">To reconcile beta's two traditional accounts: the "status quo" view (beta stabilises the current state and suppresses change) and the content-specific view (beta also carries feature information about remembered items). The authors argue these do not conflict: a persistent state can still carry a specific value. Like a latent variable in a computational decision model, a "state" has a value — here that value is the <em>magnitude of uncertainty</em> rather than an object's colour or orientation. Beta is thus both a trial-spanning state and the carrier of a content with a definite value.</span></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ===================== 附录 ===================== -->
+    <section id="appendix">
+      <div class="chapter-head">
+        <div class="chapter-num">13</div>
+        <h2><span class="zh">附录：数据、代码与延伸阅读</span><span class="en">Appendix: data, code and further reading</span></h2>
+      </div>
+
+      <div class="prose">
+        <h3><span class="zh">本文的数据与代码</span><span class="en">This paper's data and code</span></h3>
+        <p>
+          <span class="zh">去标识化的预处理数据与全部分析代码已公开存放在 OSF：<span class="mono">https://osf.io/t96rn</span>。这是很值得利用的资源——你可以直接下载来复现，或者跑原文没做的分析（比如第 10 章提到的那个冲突分析）。</span>
+          <span class="en">De-identified preprocessed data and all original analysis code are publicly archived on OSF: <span class="mono">https://osf.io/t96rn</span>. This is a resource worth using — download it to reproduce the analyses, or run one the paper didn't (such as the conflict analysis suggested in chapter 10).</span>
+        </p>
+
+        <h3><span class="zh">想继续深入，按这个顺序读</span><span class="en">To go deeper, read in this order</span></h3>
+        <ul>
+          <li><span class="zh"><strong>先读本实验室的前作</strong>：Li, Sprague, Yoo, Ma &amp; Curtis (2021), <em>Neuron</em>——用 fMRI 做同类任务，发现工作记忆与不确定性的联合表征。本文是它在 EEG 上的对应。</span><span class="en"><strong>Start with the lab's own prior work</strong>: Li, Sprague, Yoo, Ma &amp; Curtis (2021), <em>Neuron</em> — the fMRI version of this task, showing joint representation of working memory and uncertainty. This paper is its EEG counterpart.</span></li>
+          <li><span class="zh"><strong>然后是方法</strong>：van Bergen &amp; Jehee (2019), <em>Nature Neuroscience</em> 与 TAFKAP 预印本（2021）——本文贝叶斯解码器的来源。</span><span class="en"><strong>Then the method</strong>: van Bergen &amp; Jehee (2019), <em>Nature Neuroscience</em>, and the TAFKAP preprint (2021) — where this paper's Bayesian decoder comes from.</span></li>
+          <li><span class="zh"><strong>然后是理论框架</strong>：Pouget, Drugowitsch &amp; Kepecs (2016), <em>Nature Neuroscience</em>——论证 confidence 与 certainty 是服务于不同目标的、不同的概率量。读完你会更理解本文为什么特意声明"不区分"。</span><span class="en"><strong>Then the theoretical frame</strong>: Pouget, Drugowitsch &amp; Kepecs (2016), <em>Nature Neuroscience</em> — arguing confidence and certainty are distinct probabilistic quantities serving different goals. Read it to understand why this paper explicitly declines to distinguish them.</span></li>
+          <li><span class="zh"><strong>最后是综述</strong>：Walker 等 (2023), <em>Nature Neuroscience</em>, "Studying the neural representations of uncertainty"——把整个不确定性的神经表征研究梳理了一遍，适合作为进入这个领域的入口。</span><span class="en"><strong>Finally the review</strong>: Walker et al. (2023), <em>Nature Neuroscience</em>, "Studying the neural representations of uncertainty" — a survey of the whole field, a good entry point.</span></li>
+        </ul>
+
+        <h3><span class="zh">原始文献信息</span><span class="en">Full citation</span></h3>
+        <p>
+          <span class="zh">Di, Y., An, X., &amp; Li, H.-H. (2026). Distinct oscillatory neural rhythms support representational precision and confidence in working memory. <em>Current Biology</em>, 36, 1–10. https://doi.org/10.1016/j.cub.2026.08.041</span>
+          <span class="en">Di, Y., An, X., &amp; Li, H.-H. (2026). Distinct oscillatory neural rhythms support representational precision and confidence in working memory. <em>Current Biology</em>, 36, 1–10. https://doi.org/10.1016/j.cub.2026.08.041</span>
+        </p>
+      </div>
+
+      <div class="callout info">
+        <div class="ct"><span class="zh">关于这份手册</span><span class="en">About this manual</span></div>
+        <p><span class="zh">内容全部依据原文正文、图注与 STAR Methods 编写。所有统计数字均直接引用原文报告值；两处图示（图 2 的后验分布、图 5 的时间线）为依据原文描述重绘的<strong>示意图</strong>，已在图注中标明，不代表原始数值。原文未报告数字的地方（如 Figure 3D、解码误差与记忆误差的相关）本手册同样不臆造。</span><span class="en">Everything here is drawn from the paper's main text, figure legends and STAR Methods. All statistics are the values the paper reports. Two figures (Fig 2, the posteriors; Fig 5, the time courses) are <strong>schematics</strong> redrawn from the paper's descriptions, labelled as such in their captions, and do not represent original values. Where the paper reports no number — Figure 3D, or the decoding-error/memory-error correlation — this manual does not invent one.</span></p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="cite">
+        Di, Y., An, X., &amp; Li, H.-H. (2026). Distinct oscillatory neural rhythms support representational precision and confidence in working memory. <em>Current Biology</em>, 36, 1–10. https://doi.org/10.1016/j.cub.2026.08.041
+      </div>
+      <p>
+        <span class="zh">面向心理学本科生的论文精读手册 · 中英双语 · 全部内容基于公开原文</span>
+        <span class="en">A close-reading manual for psychology undergraduates · bilingual · based entirely on the published paper</span>
+      </p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- 语言切换 ---------- */
+  var KEY = 'di2026-lang';
+  var btnZh = document.getElementById('btn-zh');
+  var btnEn = document.getElementById('btn-en');
+
+  function readStored(){
+    try { return localStorage.getItem(KEY); } catch(e){ return null; }
+  }
+  function store(l){
+    try { localStorage.setItem(KEY, l); } catch(e){ /* 无痕模式等，忽略 */ }
+  }
+  function apply(lang){
+    if (lang === 'en') {
+      document.documentElement.setAttribute('data-lang','en');
+      document.documentElement.setAttribute('lang','en');
+    } else {
+      document.documentElement.removeAttribute('data-lang');
+      document.documentElement.setAttribute('lang','zh-CN');
+    }
+    btnZh.setAttribute('aria-pressed', lang === 'en' ? 'false' : 'true');
+    btnEn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  }
+
+  btnZh.addEventListener('click', function(){ apply('zh'); store('zh'); });
+  btnEn.addEventListener('click', function(){ apply('en'); store('en'); });
+  apply(readStored() === 'en' ? 'en' : 'zh');
+
+  /* ---------- 目录（自动从 h2 生成，保证与正文一致） ---------- */
+  var railList = document.getElementById('rail-list');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section'));
+  var links = [];
+
+  sections.forEach(function(sec){
+    var num = sec.querySelector('.chapter-num');
+    var head = sec.querySelector('.chapter-head h2');
+    if (!num || !head) return;
+
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + sec.id;
+
+    var n = document.createElement('span');
+    n.className = 'num';
+    n.textContent = num.textContent.trim();
+
+    var t = document.createElement('span');
+    // 目录标签：取 h2 的中文与英文两半
+    var zh = head.querySelector('.zh');
+    var en = head.querySelector('.en');
+    var sz = document.createElement('span'); sz.className = 'zh'; sz.textContent = zh ? zh.textContent : head.textContent;
+    var se = document.createElement('span'); se.className = 'en'; se.textContent = en ? en.textContent : head.textContent;
+    t.appendChild(sz); t.appendChild(se);
+
+    a.appendChild(n); a.appendChild(t);
+    li.appendChild(a);
+    railList.appendChild(li);
+    links.push({ a: a, sec: sec });
+  });
+
+  /* ---------- 阅读进度 ---------- */
+  var bar = document.getElementById('progress');
+  var ticking = false;
+  function updateProgress(){
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var pct = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
+    bar.style.width = pct.toFixed(2) + '%';
+    ticking = false;
+  }
+  function onScroll(){
+    if (!ticking) { ticking = true; window.requestAnimationFrame(updateProgress); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  updateProgress();
+
+  /* ---------- 目录高亮 ---------- */
+  if ('IntersectionObserver' in window && links.length) {
+    var visible = new Map();
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible.set(e.target, e.isIntersecting ? e.intersectionRatio : 0); });
+      var best = null, bestRatio = 0;
+      visible.forEach(function(r, el){ if (r > bestRatio) { bestRatio = r; best = el; } });
+      links.forEach(function(l){ l.a.classList.toggle('active', l.sec === best); });
+    }, { rootMargin: '-80px 0px -60% 0px', threshold: [0, 0.1, 0.5, 1] });
+    links.forEach(function(l){ obs.observe(l.sec); });
+  }
+
+  /* ---------- 术语表搜索 ---------- */
+  var input = document.getElementById('gsearch');
+  var count = document.getElementById('gcount');
+  var terms = Array.prototype.slice.call(document.querySelectorAll('#glossary-list .gterm'));
+
+  terms.forEach(function(t){ t.setAttribute('data-text', t.textContent.toLowerCase()); });
+
+  function filter(){
+    var q = (input.value || '').trim().toLowerCase();
+    var shown = 0;
+    terms.forEach(function(t){
+      var hit = !q || t.getAttribute('data-text').indexOf(q) !== -1;
+      t.hidden = !hit;
+      if (hit) shown++;
+    });
+    count.textContent = q ? (shown + ' / ' + terms.length) : (terms.length + ' 条');
+  }
+  input.addEventListener('input', filter);
+  filter();
+})();
+</script>
